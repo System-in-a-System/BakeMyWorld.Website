@@ -21,13 +21,16 @@
 
 @foreach (var cake in Model.Cakes)
 {
-    <div>@cake.Name</div>
-    <div>@cake.Description</div>
-    <div>@cake.ImageUrl</div>
-    <div>@cake.Price</div>
+    <a asp-route="cakedetails" asp-route-urlSlug="@cake.UrlSlug">
+        <div>@cake.Name</div>
+        <div>@cake.Description</div>
+        <div>@cake.ImageUrl</div>
+        <div>@cake.Price</div>
+    </a>
+
 }
 
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-area="" asp-controller="Categories" asp-action="Index">Back to List</a>
 </div>
