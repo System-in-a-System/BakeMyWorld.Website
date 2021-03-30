@@ -1,3 +1,3 @@
-#Bake My World
+# Bake My World
 
-##E-commerce solution for "Bake My World" confectionery
+## E-commerce solution for "Bake My World" confectionery
