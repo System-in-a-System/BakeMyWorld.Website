@@ -140,6 +140,18 @@ main .v-container {
 }
 
 /*---------- Hero section --------------*/
+.carousel {
+    height: 560px;
+}
+
+.carousel-inner {
+    height: 560px;
+}
+
+.carousel-item {
+    height: 560px;
+}
+
 .hero-img {
   height: 24vw;
   opacity: 0.3;
