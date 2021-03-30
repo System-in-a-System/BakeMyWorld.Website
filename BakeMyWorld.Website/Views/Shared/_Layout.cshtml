@@ -3,46 +3,157 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BakeMyWorld.Website</title>
+    <title>@ViewData["Title"] - Bake My World</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/global-style.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BakeMyWorld.Website</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+        <div class="h-container">
+            <div class="v-container search-bar-container">
+                <form class="v-container search-bar-container" method="get" action="">
+                    <input class="search-bar"
+                           type="search"
+                           placeholder="Search...  "
+                           required />
+                    <i class="material-icons left-on-top">search</i>
+                </form>
+            </div>
+
+            <div class="v-container align-items-central">
+                <div class="h-container shopping-cart-icon-container">
+                    <i class="material-icons">shopping_cart</i>
+                    <div id="online-status"></div>
+                </div>
+                <div class="h-container account-links-container">
+                    <a href="index.html" class="account-link">Home</a>
+                    <a href="register.html" class="account-link">Register</a>
+                    <a href="login.html" class="account-link" id="login-switcher">Login</a>
                 </div>
             </div>
-        </nav>
+        </div>
+
+        <div class="h-container stick-central">
+            <nav class="global-navigation">
+                <ul>
+                    <li><a href="orderonline.html">Order online</a></li>
+                    <li><a href="contactus.html">Visit us</a></li>
+                    <li><a href="classes.html">Classes</a></li>
+
+                    <li class="logo-holder">
+                        <img class="logo-image align-items-central"
+                             src="https://www.eatlogos.com/Entertainment_logos/png/vector_cake_food_logo.png"
+                             alt="logo-img" />
+                    </li>
+
+                    <li><a href="corporate.html">Corporate</a></li>
+                    <li><a href="locationhire.html">Location hire</a></li>
+                    <li><a href="aboutus.html">About us</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
+
+    <div class="v-container">
+        <img class="hero-img"
+             src="https://cdn.pixabay.com/photo/2016/07/18/19/28/dessert-1526597__480.jpg"
+             alt="hero-img" />
+        <p class="central-on-top hero-text">
+            Bake The World A Better Place
+        </p>
+    </div>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - BakeMyWorld.Website - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="v-container stick-central">
+        <div class="h-container stick-central">
+            <div class="v-container align-items-central">
+                <p class="big-headline">PURCHASE GIFT VOUCHERS</p>
+                <p>Choose from a range of gifts & vouchers</p>
+                <i class="material-icons">card_giftcard</i>
+                <a class="purchase-link" href="category.html">Purchase</a>
+            </div>
+        </div>
+
+        <div class="h-container stick-central">
+            <i class="material-icons">camera_enhance</i>
+            <i class="material-icons">drafts</i>
+        </div>
+
+        <div class="h-container link-lists stick-central align-items-to-flex-start">
+            <div class="v-container">
+                <a href="contactus.html">OUR STORES</a>
+                <a href="contactus.html">Contact us</a>
+                <a href="contactus.html">Visit us</a>
+            </div>
+            <div class="v-container">
+                <a href="orderonline.html">ORDER ONLINE</a>
+                <a href="orderonline.html">Product Selection</a>
+                <a href="product.html">Winter Bestsellers</a>
+                <a href="category.html">Popular</a>
+            </div>
+            <div class="v-container">
+                <a href="orderonline.html">PRODUCTS</a>
+                <a href="category.html">Fruit Cakes</a>
+                <a href="category.html">Berries Cakes</a>
+                <a href="category.html">Sticky Fingers</a>
+                <a href="category.html">Wedding Cakes</a>
+                <a href="category.html">Birthday Cakes</a>
+            </div>
+            <div class="v-container">
+                <a href="classes.html">CLASSES</a>
+                <a href="singleclass.html">Public Classes</a>
+                <a href="singleclass.html">Private Classes</a>
+                <a href="singleclass.html">Special Classes</a>
+            </div>
+            <div class="v-container">
+                <a href="contactus.html">GIFT SHOPS</a>
+                <a href="contactus.html">Visit Our Stores</a>
+                <a href="category.html">Personlized Products</a>
+            </div>
+        </div>
+        <div class="h-container bottom-links align-items-to-flex-start">
+            <div class="v-container contact-info-text">
+                <p class="big-headline">Contact</p>
+                <p>Primrose Hill 69 Gloucester Avenue, London NW1 8LD</p>
+                <p>Tel 020 7483 4222</p>
+                <p>WhatsApp 078 0227 5205</p>
+                <p>primrosehill@primrose-bakery.co.uk</p>
+                <p>Opening Hours: Monday-Sunday 9am-5pm.</p>
+            </div>
+
+            <div class="h-container final-about-us-links">
+                <div class="v-container">
+                    <a href="aboutus.html">ABOUT US</a>
+                    <a href="ourstory.html">Our Story</a>
+                    <a href="press.html">Press About Us</a>
+                </div>
+                <div class="v-container">
+                    <a href="category.html">GIFT VOUCHERS</a>
+                    <a href="category.html">Popular</a>
+                    <a href="product.html">Hot prices</a>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
