@@ -43,6 +43,11 @@ namespace BakeMyWorld.Website.Controllers
             return View();
         }
 
+        public IActionResult Press()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
