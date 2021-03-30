@@ -35,7 +35,9 @@ namespace BakeMyWorld.Website.Controllers
             }
 
             var category = await context.Categories
+                .Include(m => m.Cakes)
                 .FirstOrDefaultAsync(m => m.UrlSlug == urlSlug);
+
             if (category == null)
             {
                 return NotFound();
