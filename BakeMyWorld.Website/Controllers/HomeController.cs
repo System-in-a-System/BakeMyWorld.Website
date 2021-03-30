@@ -23,7 +23,7 @@ namespace BakeMyWorld.Website.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult VisitUs()
         {
             return View();
         }
