@@ -56,7 +56,7 @@ namespace BakeMyWorld.Website
                 endpoints.MapAreaControllerRoute(
                     name: "Admin",
                     areaName: "Admin",
-                    pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "Admin/{controller=Categories}/{action=Index}/{id?}");
 
 
                 endpoints.MapControllerRoute(
