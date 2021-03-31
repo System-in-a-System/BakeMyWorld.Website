@@ -3,14 +3,16 @@ using BakeMyWorld.Website.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BakeMyWorld.Website.Migrations
 {
     [DbContext(typeof(BakeMyWorldContext))]
-    partial class BakeMyWorldContextModelSnapshot : ModelSnapshot
+    [Migration("20210331175308_AddImageUrlToCategory")]
+    partial class AddImageUrlToCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

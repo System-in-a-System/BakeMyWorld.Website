@@ -36,6 +36,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
 
             var cake = await context.Cakes
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cake == null)
             {
                 return NotFound();
@@ -55,7 +56,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ImageUrl,Price,UrlSlug")] Cake cake)
+        public async Task<IActionResult> Create([Bind("Name,Description,ImageUrl,Price")] Cake cake)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +88,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ImageUrl,Price,UrlSlug")] Cake cake)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,ImageUrl,Price")] Cake cake)
         {
             if (id != cake.Id)
             {
