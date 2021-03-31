@@ -58,5 +58,6 @@ namespace BakeMyWorld.Website.Data.Entities
         public string UrlSlug { get; protected set; }
 
         public ICollection<Category> Categories { get; protected set; }
+            = new List<Category>();
     }
 }

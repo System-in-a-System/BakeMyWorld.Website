@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BakeMyWorld.Website.Data;
 using BakeMyWorld.Website.Data.Entities;
+using BakeMyWorld.Website.Areas.Admin.Models.ViewModels;
 
 namespace BakeMyWorld.Website.Areas.Admin.Controllers
 {
@@ -48,6 +49,12 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         // GET: Admin/Cakes/Create
         public IActionResult Create()
         {
+            // Retrieve categories for dropdown box
+            var categories = context.Categories.ToList()
+                .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name.ToString() }).ToList();
+
+            ViewBag.Categories = categories;
+
             return View();
         }
 
@@ -56,15 +63,30 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,ImageUrl,Price")] Cake cake)
+        public async Task<IActionResult> Create(CreateCakeViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                // Retrieve associated category (in case of unselection, category id will be set to default value "1")
+                string categoryIdString = Request.Form["Categories"];
+                bool categoryIdIsValid = int.TryParse(categoryIdString, out int categoryIdParsed);
+                int categoryId = categoryIdIsValid ? categoryIdParsed : 1;
+                var associatedCategory = await context.Categories.FindAsync(categoryId);
+
+                var cake = new Cake(
+                    viewModel.Name,
+                    viewModel.Description,
+                    viewModel.ImageUrl,
+                    viewModel.Price
+                    );
+
+                cake.Categories.Add(associatedCategory);
+                
                 context.Add(cake);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(cake);
+            return View(viewModel);
         }
 
         // GET: Admin/Cakes/Edit/5
@@ -76,11 +98,28 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
             }
 
             var cake = await context.Cakes.FindAsync(id);
+
             if (cake == null)
             {
                 return NotFound();
             }
-            return View(cake);
+
+            var viewModel = new EditCakeViewModel
+            {
+                Id = cake.Id,
+                Name = cake.Name,
+                Description = cake.Description,
+                ImageUrl = cake.ImageUrl,
+                Price = cake.Price
+            };
+
+            // Retrieve categories for dropdown box
+            var categories = context.Categories.ToList()
+                .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name.ToString() }).ToList();
+
+            ViewBag.Categories = categories;
+
+            return View(viewModel);
         }
 
         // POST: Admin/Cakes/Edit/5
@@ -88,15 +127,35 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,ImageUrl,Price")] Cake cake)
+        public async Task<IActionResult> Edit(int id, EditCakeViewModel viewModel)
         {
-            if (id != cake.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                // Retrieve associated category (in case of unselection, category id will be set to default value "1")
+                string categoryIdString = Request.Form["Categories"];
+                bool categoryIdIsValid = int.TryParse(categoryIdString, out int categoryIdParsed);
+                int categoryId = categoryIdIsValid ? categoryIdParsed : 1;
+                var associatedCategory = await context.Categories.FindAsync(categoryId);
+
+                // Retrieve located cake existing categories
+                var locatedCake = await context.Cakes.FindAsync(viewModel.Id);
+                var locatedCakeCategories = locatedCake.Categories.ToList();
+
+                var cake = new Cake(
+                    viewModel.Id,
+                    viewModel.Name,
+                    viewModel.Description,
+                    viewModel.ImageUrl,
+                    viewModel.Price
+                    );
+
+                if (!locatedCakeCategories.Contains(associatedCategory)) cake.Categories.Add(associatedCategory);
+               
                 try
                 {
                     context.Update(cake);
@@ -115,7 +174,8 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(cake);
+
+            return View(viewModel);
         }
 
         // GET: Admin/Cakes/Delete/5

@@ -1,4 +1,4 @@
-﻿@model BakeMyWorld.Website.Data.Entities.Cake
+﻿@model BakeMyWorld.Website.Areas.Admin.Models.ViewModels.CreateCakeViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -12,6 +12,16 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <div class="v-container align-items-lg-stretch">
+                    <label asp-for="Categories" class="control-label"></label>
+                    <select asp-for="Categories"
+                            asp-items="@ViewBag.Categories;">
+                        <option>Select Category</option>
+                    </select>
+                </div>
+                <span asp-validation-for="Categories" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -31,11 +41,6 @@
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UrlSlug" class="control-label"></label>
-                <input asp-for="UrlSlug" class="form-control" />
-                <span asp-validation-for="UrlSlug" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
