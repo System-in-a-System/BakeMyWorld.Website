@@ -43,21 +43,21 @@ namespace BakeMyWorld.Website.Data.Entities
         public int Id { get; protected set; }
 
         [Required]
-        public string Name { get; protected set; }
+        public string Name { get; set; }
 
-        public string Description { get; protected set; }
+        public string Description { get; set; }
 
-        public Uri ImageUrl { get; protected set; }
+        public Uri ImageUrl { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; protected set; }
+        public decimal Price { get; set; }
 
         [Required]
         [MaxLength(50)]
         public string UrlSlug { get; protected set; }
 
-        public ICollection<Category> Categories { get; protected set; }
+        public ICollection<Category> Categories { get; set; }
             = new List<Category>();
     }
 }
