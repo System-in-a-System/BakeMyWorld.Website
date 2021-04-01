@@ -142,28 +142,33 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
                 int categoryId = categoryIdIsValid ? categoryIdParsed : 1;
                 var associatedCategory = await context.Categories.FindAsync(categoryId);
 
-                // Retrieve located cake existing categories
-                var locatedCake = await context.Cakes.FindAsync(viewModel.Id);
+                // Retrieve located cake and its categories
+                var locatedCake = await context.Cakes.Include(c => c.Categories).FirstOrDefaultAsync(c => c.Id == viewModel.Id); 
                 var locatedCakeCategories = locatedCake.Categories.ToList();
 
-                var cake = new Cake(
-                    viewModel.Id,
-                    viewModel.Name,
-                    viewModel.Description,
-                    viewModel.ImageUrl,
-                    viewModel.Price
-                    );
+                locatedCake.Name = viewModel.Name;
+                locatedCake.Description = viewModel.Description;
+                locatedCake.ImageUrl = viewModel.ImageUrl;
+                locatedCake.Price = viewModel.Price;
 
-                if (!locatedCakeCategories.Contains(associatedCategory)) cake.Categories.Add(associatedCategory);
+                //var cake = new Cake(
+                 //   viewModel.Id,
+                 //   viewModel.Name,
+                 //   viewModel.Description,
+                 //   viewModel.ImageUrl,
+                 //   viewModel.Price
+                 //   );
+
+                if (!locatedCakeCategories.Contains(associatedCategory)) locatedCake.Categories.Add(associatedCategory);
                
                 try
                 {
-                    context.Update(cake);
+                    context.Update(locatedCake);
                     await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CakeExists(cake.Id))
+                    if (!CakeExists(locatedCake.Id))
                     {
                         return NotFound();
                     }
