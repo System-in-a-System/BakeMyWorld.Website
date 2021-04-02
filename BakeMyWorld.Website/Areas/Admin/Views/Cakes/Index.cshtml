@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BakeMyWorld.Website.Data.Entities.Category>
+﻿@model IEnumerable<BakeMyWorld.Website.Data.Entities.Cake>
 
 @{
     ViewData["Title"] = "Index";
@@ -18,6 +18,12 @@
             <th>
                 Image
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -28,7 +34,13 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <img class="category-image-mini" src="@item.ImageUrl" style="width:200px; height: 120px;"/>
+                <img src="@Html.DisplayFor(modelItem => item.ImageUrl)" style="width: 100px;"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

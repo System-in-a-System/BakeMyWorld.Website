@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BakeMyWorld.Website.Data;
 using BakeMyWorld.Website.Data.Entities;
+using BakeMyWorld.Website.Areas.Admin.Models.ViewModels;
 
 namespace BakeMyWorld.Website.Areas.Admin.Controllers
 {
@@ -35,7 +36,9 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
             }
 
             var category = await context.Categories
+                .Include(m => m.Cakes)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (category == null)
             {
                 return NotFound();
@@ -55,15 +58,18 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,UrlSlug")] Category category)
+        public async Task<IActionResult> Create(CreateCategoryViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                var category = new Category(viewModel.Name,
+                                            viewModel.ImageUrl);
+
                 context.Add(category);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(viewModel);
         }
 
         // GET: Admin/Categories/Edit/5
@@ -75,11 +81,20 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
             }
 
             var category = await context.Categories.FindAsync(id);
+
             if (category == null)
             {
                 return NotFound();
             }
-            return View(category);
+
+            var viewModel = new EditCategoryViewModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+                ImageUrl = category.ImageUrl
+            };
+
+            return View(viewModel);
         }
 
         // POST: Admin/Categories/Edit/5
@@ -87,19 +102,23 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,UrlSlug")] Category category)
+        public async Task<IActionResult> Edit(int id, EditCategoryViewModel viewModel)
         {
-            if (id != category.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var category = new Category(
+                        viewModel.Id,
+                        viewModel.Name,
+                        viewModel.ImageUrl);
                 try
                 {
-                    context.Update(category);
-                    await context.SaveChangesAsync();
+                   context.Update(category);
+                   await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -114,7 +133,8 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+
+            return View(viewModel);
         }
 
         // GET: Admin/Categories/Delete/5
@@ -126,7 +146,9 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
             }
 
             var category = await context.Categories
+                .Include(m => m.Cakes)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (category == null)
             {
                 return NotFound();

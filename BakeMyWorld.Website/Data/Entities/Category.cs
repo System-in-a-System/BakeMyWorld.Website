@@ -9,10 +9,18 @@ namespace BakeMyWorld.Website.Data.Entities
 {
     public class Category
     {
-        public Category(int id, string name)
+        public Category(int id, string name, Uri imageUrl)
         {
             Id = id;
             Name = name;
+            ImageUrl = imageUrl;
+            UrlSlug = name.Slugify();
+        }
+
+        public Category(string name, Uri imageUrl)
+        {
+            Name = name;
+            ImageUrl = imageUrl;
             UrlSlug = name.Slugify();
         }
 
@@ -21,6 +29,8 @@ namespace BakeMyWorld.Website.Data.Entities
         [Required]
         [MaxLength(50)]
         public string Name { get; protected set; }
+
+        public Uri ImageUrl { get; protected set; }
 
         [Required]
         [MaxLength(50)]
