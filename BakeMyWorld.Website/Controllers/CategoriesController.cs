@@ -34,6 +34,8 @@ namespace BakeMyWorld.Website.Controllers
                 return NotFound();
             }
 
+            ViewBag.Categories = context.Categories;
+            
             var category = await context.Categories
                 .Include(m => m.Cakes)
                 .FirstOrDefaultAsync(m => m.UrlSlug == urlSlug);
