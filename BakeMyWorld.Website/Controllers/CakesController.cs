@@ -10,23 +10,17 @@ using BakeMyWorld.Website.Data.Entities;
 
 namespace BakeMyWorld.Website.Controllers
 {
-    public class CategoriesController : Controller
+    public class CakesController : Controller
     {
         private readonly BakeMyWorldContext context;
 
-        public CategoriesController(BakeMyWorldContext context)
+        public CakesController(BakeMyWorldContext context)
         {
             this.context = context;
         }
 
-        // GET: Categories
-        public async Task<IActionResult> Index()
-        {
-            return View(await context.Categories.ToListAsync());
-        }
-
-        // GET /Categories/sour
-        [Route("/categories/{urlSlug}", Name = "categorydetails")]
+        // GET /cakes/chocolate-cake
+        [Route("/cakes/{urlSlug}", Name = "cakedetails")]
         public async Task<IActionResult> Details(string urlSlug)
         {
             if (urlSlug == "")
@@ -34,16 +28,14 @@ namespace BakeMyWorld.Website.Controllers
                 return NotFound();
             }
 
-            var category = await context.Categories
-                .Include(m => m.Cakes)
+            var cake = await context.Cakes
                 .FirstOrDefaultAsync(m => m.UrlSlug == urlSlug);
-
-            if (category == null)
+            if (cake == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(cake);
         }
     }
 }
