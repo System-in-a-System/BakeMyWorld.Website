@@ -4,27 +4,18 @@
     ViewData["Title"] = "Explore Categories";
 }
 
-<h1>Explore Categories</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-route="categorydetails" asp-route-urlSlug="@item.UrlSlug">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<link rel="stylesheet" href="~/css/components/orderonline-components.css"/>
+<div class="grid-container">
+    @foreach (var item in Model)
+    {
+        <a asp-route="categorydetails" asp-route-urlSlug="@item.UrlSlug">
+            <div class="image-container">
+                <img class="product-img"
+                     src="@item.ImageUrl"
+                     alt="cake-category" />
+                <p class="image-title">@Html.DisplayFor(modelItem => item.Name)</p>
+            </div>
+        </a>
+    }   
+</div>
