@@ -1,10 +1,10 @@
 ﻿@model BakeMyWorld.Website.Data.Entities.Cake
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = @Html.DisplayFor(model => model.Name);
 }
 
-<h1>Details</h1>
+<h1>@Html.DisplayFor(model => model.Name)</h1>
 
 <div>
     <h4>Cake</h4>
