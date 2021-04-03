@@ -67,11 +67,11 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Retrieve associated category (in case of unselection, category id will be set to default value "1")
+                // Retrieve associated category (in case of unselection, category id will be set to default value "0")
                 string categoryIdString = Request.Form["Categories"];
                 bool categoryIdIsValid = int.TryParse(categoryIdString, out int categoryIdParsed);
-                int categoryId = categoryIdIsValid ? categoryIdParsed : 1;
-                var associatedCategory = await context.Categories.FindAsync(categoryId);
+                int categoryId = categoryIdIsValid ? categoryIdParsed : 0;
+                var associatedCategory = context.Categories.Find(categoryId);
 
                 var cake = new Cake(
                     viewModel.Name,
@@ -80,7 +80,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
                     viewModel.Price
                     );
 
-                cake.Categories.Add(associatedCategory);
+                if(associatedCategory != null) cake.Categories.Add(associatedCategory);
                 
                 context.Add(cake);
                 await context.SaveChangesAsync();
