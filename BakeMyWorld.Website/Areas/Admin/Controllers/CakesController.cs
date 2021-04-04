@@ -139,7 +139,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
                 // Retrieve associated category (in case of unselection, category id will be set to default value "1")
                 string categoryIdString = Request.Form["Categories"];
                 bool categoryIdIsValid = int.TryParse(categoryIdString, out int categoryIdParsed);
-                int categoryId = categoryIdIsValid ? categoryIdParsed : 1;
+                int categoryId = categoryIdIsValid ? categoryIdParsed : 0;
                 var associatedCategory = await context.Categories.FindAsync(categoryId);
 
                 // Retrieve located cake and its categories
@@ -151,6 +151,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
                 locatedCake.ImageUrl = viewModel.ImageUrl;
                 locatedCake.Price = viewModel.Price;
 
+                // Context multiple tracking problem (context cannot track same ids simultaneously)
                 //var cake = new Cake(
                  //   viewModel.Id,
                  //   viewModel.Name,
@@ -159,7 +160,12 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
                  //   viewModel.Price
                  //   );
 
-                if (!locatedCakeCategories.Contains(associatedCategory)) locatedCake.Categories.Add(associatedCategory);
+                if (associatedCategory != null &&
+                    !locatedCakeCategories.Contains(associatedCategory))
+                {
+                    locatedCake.Categories.Add(associatedCategory);
+                }
+                        
                
                 try
                 {
