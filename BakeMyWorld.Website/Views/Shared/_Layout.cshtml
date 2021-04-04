@@ -18,9 +18,10 @@
     <header>
         <div class="h-container">
             <div class="v-container search-bar-container">
-                <form class="v-container search-bar-container" method="get" action="">
+                <form class="v-container search-bar-container" asp-controller="SearchResult" asp-action="Index">
                     <input class="search-bar"
                            type="search"
+                           name="q"
                            placeholder="Search...  "
                            required />
                     <i class="material-icons left-on-top">search</i>
