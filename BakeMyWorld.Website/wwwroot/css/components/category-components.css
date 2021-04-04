@@ -11,6 +11,7 @@
     margin-left: 10%;
     margin-right: 10%;
     grid-template-columns: 30% 30% 30%;
+    grid-gap: 10px;
 }
 
 .product-container {
