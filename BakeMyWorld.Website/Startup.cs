@@ -31,6 +31,11 @@ namespace BakeMyWorld.Website
             //        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => Configuration.Bind("JwtSettings", options))
             //        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => Configuration.Bind("CookieSettings", options));
 
+            services.AddSession(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+            
             services.AddDbContext<BakeMyWorldContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
@@ -56,6 +61,8 @@ namespace BakeMyWorld.Website
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
