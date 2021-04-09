@@ -40,6 +40,9 @@ namespace BakeMyWorld.Website.Models.Domain
         {
             public Cake Cake { get; set; }
             public int Quantity { get; set; }
+
+            public decimal TotalAmount => Quantity * Cake.Price;
+            
         }
 
         public class Cake
