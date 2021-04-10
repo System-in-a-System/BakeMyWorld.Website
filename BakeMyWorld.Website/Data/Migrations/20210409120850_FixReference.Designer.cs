@@ -4,14 +4,16 @@ using BakeMyWorld.Website.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BakeMyWorld.Website.Migrations
 {
     [DbContext(typeof(BakeMyWorldContext))]
-    partial class BakeMyWorldContextModelSnapshot : ModelSnapshot
+    [Migration("20210409120850_FixReference")]
+    partial class FixReference
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,7 +78,7 @@ namespace BakeMyWorld.Website.Migrations
 
             modelBuilder.Entity("BakeMyWorld.Website.Data.Entities.Customer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -101,7 +103,7 @@ namespace BakeMyWorld.Website.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CustomerId");
 
                     b.ToTable("Customers");
                 });
@@ -133,7 +135,7 @@ namespace BakeMyWorld.Website.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CakeId")
+                    b.Property<int?>("CakeId")
                         .HasColumnType("int");
 
                     b.Property<int?>("OrderId")
@@ -179,9 +181,7 @@ namespace BakeMyWorld.Website.Migrations
                 {
                     b.HasOne("BakeMyWorld.Website.Data.Entities.Cake", "Cake")
                         .WithMany()
-                        .HasForeignKey("CakeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CakeId");
 
                     b.HasOne("BakeMyWorld.Website.Data.Entities.Order", null)
                         .WithMany("OrderLines")
