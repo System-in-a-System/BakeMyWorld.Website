@@ -168,6 +168,23 @@ main .v-container {
   opacity: 0.95;
 }
 
+.order-confirmation-note {
+    margin-top: 10%;
+    margin-bottom: 15%;
+    margin-left: 22%;
+    margin-right: 22%;
+    padding: 3%;
+    background-color: whitesmoke;
+    box-shadow: grey 5px 5px
+}
+
+.cake-icon {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 5vw;
+}
+
 /*-------------- Footer --------------*/
 footer.v-container div {
   background-color: white;

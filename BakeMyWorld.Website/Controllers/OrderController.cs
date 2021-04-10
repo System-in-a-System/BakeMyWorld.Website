@@ -1,4 +1,5 @@
 ﻿using BakeMyWorld.Website.Data;
+using BakeMyWorld.Website.Data.Entities;
 using BakeMyWorld.Website.Extensions;
 using BakeMyWorld.Website.Models.Domain;
 using BakeMyWorld.Website.Models.ViewModels;
@@ -32,7 +33,7 @@ namespace BakeMyWorld.Website.Controllers
         }
 
         [HttpPost]
-        [Route ("/checkout")]
+        [Route ("/checkout", Name="checkout")]
         public IActionResult Checkout(CheckOutViewModel viewModel)
         {
             if(!ModelState.IsValid)
@@ -41,6 +42,28 @@ namespace BakeMyWorld.Website.Controllers
                 return View(viewModel);
             }
 
+            var customer = new Customer(
+                viewModel.FirstName,
+                viewModel.LastName,
+                viewModel.Email,
+                viewModel.Address);
+
+            var cart = HttpContext.Session.Get<Cart>("Cart");
+
+            var order = new Order
+            {
+                OrderLines = cart
+                    .Items
+                    .Values.Select(cartItem => new OrderLine(cartItem.Cake.Id, cartItem.Quantity))
+                    .ToList()
+            };
+
+            customer.Orders.Add(order);
+            context.Customers.Add(customer);
+            context.SaveChanges();
+
+            HttpContext.Session.Remove("Cart");
+                
             return RedirectToAction(nameof(Confirmation));
         }
 
