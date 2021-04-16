@@ -11,7 +11,7 @@
     margin-left: 10%;
     margin-right: 10%;
     grid-template-columns: 30% 30% 30%;
-    grid-gap: 10px;
+    grid-gap: 12px;
 }
 
 .product-container {
@@ -21,6 +21,7 @@
 
 .product-img {
     width: 98%;
+    height: 220px;
 }
 
 .product-img:hover {

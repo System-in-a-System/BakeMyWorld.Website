@@ -141,15 +141,15 @@ main .v-container {
 
 /*---------- Hero section --------------*/
 .carousel {
-    height: 560px;
+    height: 400px;
 }
 
 .carousel-inner {
-    height: 560px;
+    height: 400px;
 }
 
 .carousel-item {
-    height: 560px;
+    height: 400px;
 }
 
 .hero-img {
