@@ -45,7 +45,7 @@
                 <ul>
                     <li><a asp-area="" asp-controller="Categories" asp-action="Index">Order online</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="VisitUs">Visit us</a></li>
-                    <li><a href="#">Classes</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="BakingClasses">Classes</a></li>
 
                     <li class="logo-holder">
                         <img class="logo-image align-items-central"
@@ -53,7 +53,7 @@
                              alt="logo-img" />
                     </li>
 
-                    <li><a href="#">Corporate</a></li>
+                    <li><a asp-area="" asp-controller="Corporates" asp-action="Index">Corporate</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="LocationHire">Location hire</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="AboutUs">About us</a></li>
                 </ul>
@@ -160,10 +160,10 @@
                 <a asp-area="" asp-controller="Categories" asp-action="Index">Flourless Cakes</a>
             </div>
             <div class="v-container">
-                <a href="#">CLASSES</a>
-                <a href="#">Public Classes</a>
-                <a href="#">Private Classes</a>
-                <a href="#">Special Classes</a>
+                <a asp-area="" asp-controller="Home" asp-action="BakingClasses">CLASSES</a>
+                <a asp-area="" asp-controller="Home" asp-action="PublicClasses">Public Classes</a>
+                <a asp-area="" asp-controller="Home" asp-action="PrivateClasse">Private Classes</a>
+                <a asp-area="" asp-controller="Home" asp-action="SpecialClasses">Special Classes</a>
             </div>
             <div class="v-container">
                 <a asp-area="" asp-controller="Home" asp-action="VisitUs">GIFT SHOPS</a>
@@ -188,7 +188,7 @@
                     <a asp-area="" asp-controller="Home" asp-action="Press">Press About Us</a>
                 </div>
                 <div class="v-container">
-                    <a asp-area="" asp-controller="Categories" asp-action="Index">GIFT VOUCHERS</a>
+                    <a asp-area="" asp-controller="Corporates" asp-action="Index">GIFT VOUCHERS</a>
                     <a asp-area="" asp-controller="Categories" asp-action="Index">Popular</a>
                     <a asp-area="" asp-controller="Categories" asp-action="Index">Hot prices</a>
                 </div>

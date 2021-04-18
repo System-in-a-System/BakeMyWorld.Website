@@ -48,6 +48,25 @@ namespace BakeMyWorld.Website.Controllers
             return View();
         }
 
+        public IActionResult BakingClasses()
+        {
+            return View();
+        }
+
+        public IActionResult PublicClasses()
+        {
+            return View();
+        }
+
+        public IActionResult PrivateClasses()
+        {
+            return View();
+        }
+        public IActionResult SpecialClasses()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
