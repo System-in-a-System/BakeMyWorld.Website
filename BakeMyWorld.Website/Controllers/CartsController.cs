@@ -27,7 +27,7 @@ namespace BakeMyWorld.Website.Controllers
 
         [Route("/cart/add", Name = "AddToCart")]
         [HttpPost]
-        public IActionResult AddToCart(int cakeId, int quantity)
+        public IActionResult AddToCart(int cakeId)
         {
             var cake = context.Cakes.FirstOrDefault(c => c.Id == cakeId);
 

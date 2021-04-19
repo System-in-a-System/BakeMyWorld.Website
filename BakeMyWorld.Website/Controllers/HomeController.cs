@@ -11,13 +11,6 @@ namespace BakeMyWorld.Website.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -44,6 +37,21 @@ namespace BakeMyWorld.Website.Controllers
         }
 
         public IActionResult Press()
+        {
+            return View();
+        }
+
+        public IActionResult BakingClasses()
+        {
+            return View();
+        }
+
+        public IActionResult BakingClass()
+        {
+            return View();
+        }
+
+        public IActionResult CorporateServices()
         {
             return View();
         }
