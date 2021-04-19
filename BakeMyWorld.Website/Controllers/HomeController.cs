@@ -46,12 +46,16 @@ namespace BakeMyWorld.Website.Controllers
             return View();
         }
 
-        public IActionResult BakingClass()
+        public IActionResult PublicClasses()
         {
             return View();
         }
 
-        public IActionResult CorporateServices()
+        public IActionResult PrivateClasses()
+        {
+            return View();
+        }
+        public IActionResult SpecialClasses()
         {
             return View();
         }
