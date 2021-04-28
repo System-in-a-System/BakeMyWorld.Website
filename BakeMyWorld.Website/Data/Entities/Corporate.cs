@@ -36,8 +36,8 @@ namespace BakeMyWorld.Website.Data.Entities
         [MaxLength(50)]
         public string UrlSlug { get; protected set; }
 
-        public ICollection<GiftBox> GiftBoxes { get; protected set; }
-            = new List<GiftBox>();
+        public ICollection<Cake> Cakes { get; protected set; }
+            = new List<Cake>();
 
     }
 }

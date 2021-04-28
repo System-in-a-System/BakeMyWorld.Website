@@ -13,7 +13,6 @@ namespace BakeMyWorld.Website.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<GiftBox> GiftBoxes { get; set; }
         public DbSet<Corporate> Corporates { get; set; }
 
         public BakeMyWorldContext(DbContextOptions<BakeMyWorldContext> options)

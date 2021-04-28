@@ -15,16 +15,16 @@
 </div>
 <div class="grid-container product-grid">
 
-    @foreach (var giftbox in Model.GiftBoxes)
+    @foreach (var cake in Model.Cakes)
     {
-        <a asp-route="giftboxdetails" asp-route-urlSlug="@giftbox.UrlSlug">
+        <a asp-route="cakedetails" asp-route-urlSlug="@cake.UrlSlug">
             <div class="product-container">
                 <img class="product-img"
-                     src="@giftbox.ImageUrl"
+                     src="@cake.ImageUrl"
                      alt="corporate-product"/>
                 <div>
-                    <span class="product-name">@giftbox.Name)</span>
-                    <span class="product-name">@giftbox.Price SEK</span>
+                    <span class="product-name">@cake.Name)</span>
+                    <span class="product-name">@cake.Price SEK</span>
                 </div>
             </div>
         </a>

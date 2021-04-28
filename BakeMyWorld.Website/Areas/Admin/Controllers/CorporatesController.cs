@@ -34,7 +34,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
             }
 
             var corporate = await context.Corporates
-                .Include(m => m.GiftBoxes)
+                .Include(m => m.Cakes)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (corporate == null)
@@ -141,7 +141,7 @@ namespace BakeMyWorld.Website.Areas.Admin.Controllers
             }
 
             var corporate = await context.Corporates
-                .Include(m => m.GiftBoxes)
+                .Include(m => m.Cakes)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (corporate == null)

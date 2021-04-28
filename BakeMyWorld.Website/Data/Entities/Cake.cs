@@ -59,5 +59,8 @@ namespace BakeMyWorld.Website.Data.Entities
 
         public ICollection<Category> Categories { get; set; }
             = new List<Category>();
+
+        public ICollection<Corporate> Corporates { get; set; }
+        = new List<Corporate>();
     }
 }

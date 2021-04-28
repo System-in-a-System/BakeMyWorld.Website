@@ -32,7 +32,7 @@ namespace BakeMyWorld.Website.Controllers
             ViewBag.Corporates = context.Corporates;
 
             var corporate = await context.Corporates
-                .Include(m => m.GiftBoxes)
+                .Include(m => m.Cakes)
                 .FirstOrDefaultAsync(m => m.UrlSlug == urlSlug);
 
             if (corporate == null)
