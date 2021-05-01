@@ -13,13 +13,13 @@ namespace BakeMyWorld.ConsoleManager
 
         }
         
-        public Category(string name, Uri imageUrl)
+        public Category(string name, string imageUrl)
         {
             Name = name;
             ImageUrl = imageUrl;
         }
 
-        public Category(int id, string name, Uri imageUrl)
+        public Category(int id, string name, string imageUrl)
         {
             Id = id;
             Name = name;
@@ -28,7 +28,7 @@ namespace BakeMyWorld.ConsoleManager
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public Uri ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
 
     }
 }
