@@ -13,7 +13,7 @@ namespace BakeMyWorld.ConsoleManager
 
         }
 
-        public Cake(string name, string description, string imageUrl, decimal price, int categoryId)
+        public Cake(string name, string description, Uri imageUrl, decimal price, int categoryId)
         {
             Name = name;
             Description = description;
@@ -22,7 +22,7 @@ namespace BakeMyWorld.ConsoleManager
             CategoryId = categoryId;
         }
 
-        public Cake(int id, string name, string description, string imageUrl, decimal price, int categoryId)
+        public Cake(int id, string name, string description, Uri imageUrl, decimal price, int categoryId)
         {
             Id = id;
             Name = name;
@@ -35,7 +35,7 @@ namespace BakeMyWorld.ConsoleManager
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        public Uri ImageUrl { get; set; }
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
 
