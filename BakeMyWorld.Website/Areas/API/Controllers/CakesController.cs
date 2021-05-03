@@ -95,10 +95,15 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
                 cakeDto.Price
                 );
 
+            var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == cakeDto.CategoryId);
+            cake.Categories.Add(category);
+            
             context.Cakes.Add(cake);
             await context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCake", new { id = cake.Id }, cake);
+            var cakedto = ToCakeDto(cake);
+                             
+            return CreatedAtAction("GetCake", new { id = cakedto.Id }, cakedto);
         }
 
         // DELETE: api/Cakes/5
@@ -121,5 +126,17 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         {
             return context.Cakes.Any(e => e.Id == id);
         }
+
+
+        public CakeDto ToCakeDto(Cake cake)
+           => new CakeDto
+           {
+               Id = cake.Id,
+               Name = cake.Name,
+               Description = cake.Description,
+               ImageUrl = cake.ImageUrl,
+               Price = cake.Price,
+               CategoryId = cake.Categories.FirstOrDefault().Id,
+           };
     }
 }
