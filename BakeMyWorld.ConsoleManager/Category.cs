@@ -30,5 +30,10 @@ namespace BakeMyWorld.ConsoleManager
         public string Name { get; set; }
         public string ImageUrl { get; set; }
 
+        public override string ToString()
+        {
+            return $"\n  Name: {this.Name}" +
+                   $"\n  Image Url: {this.ImageUrl}";
+        }
     }
 }

@@ -38,5 +38,13 @@ namespace BakeMyWorld.ConsoleManager
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
+
+        public override string ToString()
+        {
+            return $"\n  Name: {this.Name}" +
+                   $"\n  Description: {this.Description}" +
+                   $"\n  Image Url: {this.ImageUrl}" +
+                   $"\n  Price: {this.Price}";
+        }
     }
 }
