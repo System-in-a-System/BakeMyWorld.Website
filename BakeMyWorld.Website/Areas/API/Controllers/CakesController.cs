@@ -61,6 +61,9 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
                 cakeDto.Price
                 );
 
+            var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == cakeDto.CategoryId);
+            cake.Categories.Add(category);
+
             context.Entry(cake).State = EntityState.Modified;
 
             try
