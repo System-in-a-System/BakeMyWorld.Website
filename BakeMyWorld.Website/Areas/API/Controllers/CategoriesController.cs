@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BakeMyWorld.Website.Data;
 using BakeMyWorld.Website.Data.Entities;
+using BakeMyWorld.Website.Areas.API.Models;
 
 namespace BakeMyWorld.Website.Areas.API.Controllers
 {
@@ -45,12 +46,18 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<IActionResult> PutCategory(int id, CategoryDto categoryDto)
         {
-            if (id != category.Id)
+            if (id != categoryDto.Id)
             {
                 return BadRequest();
             }
+
+            var category = new Category(
+                categoryDto.Id,
+                categoryDto.Name,
+                categoryDto.ImageUrl
+                );
 
             context.Entry(category).State = EntityState.Modified;
 
@@ -76,8 +83,14 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<Category>> PostCategory(CategoryDto categoryDto)
         {
+            var category = new Category(
+                categoryDto.Id,
+                categoryDto.Name,
+                categoryDto.ImageUrl
+                );
+            
             context.Categories.Add(category);
             await context.SaveChangesAsync();
 

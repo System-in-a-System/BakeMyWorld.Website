@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BakeMyWorld.Website.Data;
 using BakeMyWorld.Website.Data.Entities;
+using BakeMyWorld.Website.Areas.API.Models;
 
 namespace BakeMyWorld.Website.Areas.API.Controllers
 {
@@ -45,12 +46,20 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         // PUT: api/Cakes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCake(int id, Cake cake)
+        public async Task<IActionResult> PutCake(int id, CakeDto cakeDto)
         {
-            if (id != cake.Id)
+            if (id != cakeDto.Id)
             {
                 return BadRequest();
             }
+
+            var cake = new Cake(
+                cakeDto.Id,
+                cakeDto.Name,
+                cakeDto.Description,
+                cakeDto.ImageUrl,
+                cakeDto.Price
+                );
 
             context.Entry(cake).State = EntityState.Modified;
 
@@ -76,8 +85,16 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         // POST: api/Cakes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cake>> PostCake(Cake cake)
+        public async Task<ActionResult<Cake>> PostCake(CakeDto cakeDto)
         {
+            var cake = new Cake(
+                cakeDto.Id,
+                cakeDto.Name,
+                cakeDto.Description,
+                cakeDto.ImageUrl,
+                cakeDto.Price
+                );
+
             context.Cakes.Add(cake);
             await context.SaveChangesAsync();
 
