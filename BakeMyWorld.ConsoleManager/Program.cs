@@ -120,7 +120,11 @@ namespace BakeMyWorld.ConsoleManager
                 string name = ReadLine();
 
                 SetCursorPosition(unifiedIdentation, 3);
-                string imageUrl = ReadLine();
+                string imageUrlString = ReadLine();
+                bool imageUrlOk = Uri.TryCreate(imageUrlString, UriKind.Absolute, out Uri imageUrlVerified)
+                                    && (imageUrlVerified.Scheme == Uri.UriSchemeHttp || imageUrlVerified.Scheme == Uri.UriSchemeHttps);
+
+                Uri imageUrl = imageUrlOk ? imageUrlVerified : new Uri("https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg");
 
 
                 // Further confirmation request
@@ -238,14 +242,19 @@ namespace BakeMyWorld.ConsoleManager
                     // Set cursor to visible
                     CursorVisible = true;
 
-                    // Set cursor position to each prompt subsequently & retrieve respecitve information
+                    // Set cursor position to each prompt subsequently & retrieve and validate respecitve information
                     int unifiedIdentation = "Category Name: ".Length + 3;
 
                     SetCursorPosition(unifiedIdentation, 5);
                     string name = ReadLine();
 
                     SetCursorPosition(unifiedIdentation, 6);
-                    string imageUrl = ReadLine();
+                    string imageUrlString = ReadLine();
+                    bool imageUrlOk = Uri.TryCreate(imageUrlString, UriKind.Absolute, out Uri imageUrlVerified)
+                                        && (imageUrlVerified.Scheme == Uri.UriSchemeHttp || imageUrlVerified.Scheme == Uri.UriSchemeHttps);
+
+                    Uri imageUrl = imageUrlOk ? imageUrlVerified : new Uri("https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg");
+
 
 
                     // Further confirmation request
@@ -411,7 +420,10 @@ namespace BakeMyWorld.ConsoleManager
                 string description = ReadLine();
 
                 SetCursorPosition(unifiedIdentation, 4);
-                string imageUrl = ReadLine();
+                string imageUrlString = ReadLine();
+                bool imageUrlOk = Uri.TryCreate(imageUrlString, UriKind.Absolute, out Uri imageUrlVerified)
+                                    && (imageUrlVerified.Scheme == Uri.UriSchemeHttp || imageUrlVerified.Scheme == Uri.UriSchemeHttps);
+                Uri imageUrl = imageUrlOk ? imageUrlVerified : new Uri("https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg");
 
                 SetCursorPosition(unifiedIdentation, 5);
                 bool priceOk = Int32.TryParse(ReadLine(), out int priceParsed);
@@ -590,7 +602,10 @@ namespace BakeMyWorld.ConsoleManager
                     string description = ReadLine();
 
                     SetCursorPosition(unifiedIdentation, 12);
-                    string imageUrl = ReadLine();
+                    string imageUrlString = ReadLine();
+                    bool imageUrlOk = Uri.TryCreate(imageUrlString, UriKind.Absolute, out Uri imageUrlVerified)
+                                        && (imageUrlVerified.Scheme == Uri.UriSchemeHttp || imageUrlVerified.Scheme == Uri.UriSchemeHttps);
+                    Uri imageUrl = imageUrlOk ? imageUrlVerified : new Uri("https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg");
 
                     SetCursorPosition(unifiedIdentation, 13);
                     bool priceOk = Int32.TryParse(ReadLine(), out int priceParsed);
