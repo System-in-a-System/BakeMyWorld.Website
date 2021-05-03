@@ -202,7 +202,108 @@ namespace BakeMyWorld.ConsoleManager
         }
         private static void EditCakeCategory()
         {
-            throw new NotImplementedException();
+            ListCakeCategories();
+
+            Write("\n\tID: ");
+            bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
+            int id = idValid ? idParsed : 0;
+
+            var responseLocalizedCategory = httpClient.GetAsync($"categories/{id.ToString()}")
+                .GetAwaiter()
+                .GetResult();
+        
+            Clear();
+
+            if (responseLocalizedCategory.IsSuccessStatusCode)
+            {    
+                var jsonString = responseLocalizedCategory.Content.ReadAsStringAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                var localizedCategory = JsonConvert.DeserializeObject<Category>(jsonString);
+
+                // Open prompt loop
+                do
+                {
+                    WriteLine(localizedCategory.ToString());
+                    
+                    // Prompt
+                    SetCursorPosition(2, 5);
+                    Write("Category Name: ");
+
+                    SetCursorPosition(2, 6);
+                    Write("Image Url: ");
+
+
+                    // Set cursor to visible
+                    CursorVisible = true;
+
+                    // Set cursor position to each prompt subsequently & retrieve respecitve information
+                    int unifiedIdentation = "Category Name: ".Length + 3;
+
+                    SetCursorPosition(unifiedIdentation, 5);
+                    string name = ReadLine();
+
+                    SetCursorPosition(unifiedIdentation, 6);
+                    string imageUrl = ReadLine();
+
+
+                    // Further confirmation request
+                    ConsoleKeyInfo confirmation = RequestConfirmation();
+
+                    // Respond to confirmation choice: "Yes"
+                    if (confirmation.Key == ConsoleKey.Y)
+                    {
+                        // Instantiate new Category object based on retrieved values
+                        var category = new Category(id, name, imageUrl);
+
+                        // Set TypeNameHandling to auto
+                        JsonSerializerSettings settings = new JsonSerializerSettings();
+                        settings.TypeNameHandling = TypeNameHandling.Auto;
+
+                        // Serialize to JSON
+                        var httpContent = JsonConvert.SerializeObject(category, settings);
+
+                        // Construct a content object to send the data
+                        var buffer = System.Text.Encoding.UTF8.GetBytes(httpContent);
+                        var byteContent = new ByteArrayContent(buffer);
+
+                        // Set the content type to JSON 
+                        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                        // Send put request
+                        var response = httpClient.PutAsync($"categories/{id.ToString()}", byteContent).Result;
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            WriteLine("\n  Category Edited");
+                        }
+                        else
+                        {
+                            WriteLine("\n  Something went wrong while updating the category...");
+                        }
+
+                        Thread.Sleep(2000);
+                        Clear();
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                        Clear();
+
+                        // Go back to prompt menu
+                    }
+
+                } while (true);
+            }
+            else
+            {
+                WriteLine("\n  Category not found...");
+            }
+
+            Thread.Sleep(2000);
+            Clear();
         }
         private static void DeleteCakeCategory()
         {
@@ -434,7 +535,137 @@ namespace BakeMyWorld.ConsoleManager
         }
         private static void EditCake()
         {
-            throw new NotImplementedException();
+            ListCakes();
+
+            Write("\n\tID: ");
+            bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
+            int id = idValid ? idParsed : 0;
+
+            var responseLocalizedCake = httpClient.GetAsync($"cakes/{id.ToString()}")
+                .GetAwaiter()
+                .GetResult();
+
+            Clear();
+
+            if (responseLocalizedCake.IsSuccessStatusCode)
+            {
+                var jsonString = responseLocalizedCake.Content.ReadAsStringAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                var localizedCake = JsonConvert.DeserializeObject<Cake>(jsonString);
+
+                // Open prompt loop
+                do
+                {
+                    WriteLine(localizedCake.ToString());
+
+                    // Prompt
+                    SetCursorPosition(2, 10);
+                    Write("Name: ");
+
+                    SetCursorPosition(2, 11);
+                    Write("Description: ");
+
+                    SetCursorPosition(2, 12);
+                    Write("Image Url: ");
+
+                    SetCursorPosition(2, 13);
+                    Write("Price: ");
+
+                    SetCursorPosition(2, 15);
+                    Write("Cake Category: ");
+
+
+                    // Set cursor to visible
+                    CursorVisible = true;
+
+                    // Set cursor position to each prompt subsequently & retrieve respecitve information
+                    int unifiedIdentation = "Description: ".Length + 3;
+
+                    SetCursorPosition(unifiedIdentation, 10);
+                    string name = ReadLine();
+
+                    SetCursorPosition(unifiedIdentation, 11);
+                    string description = ReadLine();
+
+                    SetCursorPosition(unifiedIdentation, 12);
+                    string imageUrl = ReadLine();
+
+                    SetCursorPosition(unifiedIdentation, 13);
+                    bool priceOk = Int32.TryParse(ReadLine(), out int priceParsed);
+                    int price = priceOk ? priceParsed : 0;
+
+                    SetCursorPosition(unifiedIdentation, 15);
+                    string categoryName = ReadLine();
+
+
+                    // Further confirmation request
+                    ConsoleKeyInfo confirmation = RequestConfirmation();
+
+                    // Respond to confirmation choice: "Yes"
+                    if (confirmation.Key == ConsoleKey.Y)
+                    {
+                        var categoryId = FetchCategoryIdByCategoryName(categoryName);
+
+                        if (categoryId < 0)
+                        {
+                            WriteLine("\n  Indicated Category was not found...");
+                            Thread.Sleep(2000);
+                            Clear();
+                            break;
+                        }
+
+                        // Instantiate new Cake object based on retrieved values
+                        var cake = new Cake(id, name, description, imageUrl, price, categoryId);
+
+                        // Set TypeNameHandling to auto
+                        JsonSerializerSettings settings = new JsonSerializerSettings();
+                        settings.TypeNameHandling = TypeNameHandling.Auto;
+
+                        // Serialize to JSON
+                        var httpContent = JsonConvert.SerializeObject(cake, settings);
+
+                        // Construct a content object to send the data
+                        var buffer = System.Text.Encoding.UTF8.GetBytes(httpContent);
+                        var byteContent = new ByteArrayContent(buffer);
+
+                        // Set the content type to JSON 
+                        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                        // Send put request
+                        var response = httpClient.PutAsync($"cakes/{id.ToString()}", byteContent).Result;
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            WriteLine("\n  Cake Edited");
+                        }
+                        else
+                        {
+                            WriteLine("\n  Something went wrong while updating the cake...");
+                        }
+
+                        Thread.Sleep(2000);
+                        Clear();
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                        Clear();
+
+                        // Go back to prompt menu
+                    }
+
+                } while (true);
+            }
+            else
+            {
+                WriteLine("\n  Cake not found...");
+            }
+
+            Thread.Sleep(2000);
+            Clear();
         }
         private static void DeleteCake()
         {
