@@ -1,17 +1,13 @@
 using BakeMyWorld.Website.Data;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BakeMyWorld.Website
 {
@@ -27,15 +23,33 @@ namespace BakeMyWorld.Website
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => Configuration.Bind("JwtSettings", options))
-            //        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => Configuration.Bind("CookieSettings", options));
+            // Configure the authentication schema with JWT bearer options
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // validate the server
+                    ValidateIssuer = true,
+                    // validate the recipient of the token is authorized to receive
+                    ValidateAudience = true,
+                    // check if the token is not expired
+                    ValidateLifetime = true,
+                    // validate signature of the token
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
+            services.AddMvc();
+
 
             services.AddSession(options =>
             {
                 options.Cookie.IsEssential = true;
             });
-            
+
             services.AddDbContext<BakeMyWorldContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
@@ -60,6 +74,7 @@ namespace BakeMyWorld.Website
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseSession();
