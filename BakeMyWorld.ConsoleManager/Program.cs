@@ -17,6 +17,8 @@ namespace BakeMyWorld.ConsoleManager
         {
             httpClient.BaseAddress = new Uri("https://localhost:44378/api/");
 
+            HandleLogin();
+
             CursorVisible = false;
 
             bool applicationRunning = true;
@@ -49,6 +51,78 @@ namespace BakeMyWorld.ConsoleManager
                 }
 
             } while (applicationRunning);
+        }
+
+
+        private static void HandleLogin()
+        {
+            // Declare credentials "validator"
+            bool loginOk = false;
+
+            // Prompt user to enter credentials until valid
+            // Open "login loop"
+            while (!loginOk)
+            {
+                // Prompt for username
+                SetCursorPosition(2, 2);
+                string promptUsername = "Username: ";
+                Write(promptUsername + "\n");
+
+                // Prompt for password
+                SetCursorPosition(2, 3);
+                string promptPassword = "Password: ";
+                Write(promptPassword);
+
+
+                // Set cursor position to each prompt & Retrieve respective user credentials
+                CursorVisible = true;
+                SetCursorPosition(promptUsername.Length + 2, 2);
+                string inputUsername = ReadLine();
+                SetCursorPosition(promptPassword.Length + 2, 3);
+                string inputPassword = ReadLine();
+
+
+                // Check if input credentials match target credentials
+                loginOk = Authorize(inputUsername, inputPassword);
+
+            } // the end of the "login loop"
+        }
+        private static bool Authorize(string inputUsername, string inputPassword)
+        {
+            // Instantiate new Admin object based on retrieved values
+            var admin = new Admin(inputUsername, inputPassword);
+
+            // Set TypeNameHandling to auto
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.Auto;
+
+            // Serialize to JSON
+            var httpContent = JsonConvert.SerializeObject(admin, settings);
+
+            // Construct a content object to send the data
+            var buffer = System.Text.Encoding.UTF8.GetBytes(httpContent);
+            var byteContent = new ByteArrayContent(buffer);
+
+            // Set the content type to JSON 
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            // Send post request
+            var response = httpClient.PostAsync("login", byteContent).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("\n  You logged in as Admin");
+                Thread.Sleep(2000);
+                Clear();
+                return true;
+            }
+            else
+            {
+                WriteLine("\n  Access denied");
+                Thread.Sleep(2000);
+                Clear();
+                return false;
+            }
         }
 
 
