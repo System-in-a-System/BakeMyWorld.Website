@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using BakeMyWorld.Website.Data;
 using BakeMyWorld.Website.Data.Entities;
 using BakeMyWorld.Website.Areas.API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BakeMyWorld.Website.Areas.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CakesController : ControllerBase
     {
         private readonly BakeMyWorldContext context;
