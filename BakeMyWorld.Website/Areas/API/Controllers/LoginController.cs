@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace BakeMyWorld.Website.Areas.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -35,7 +36,8 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
             if (admin != null)
             {
                 var tokenString = GenerateJSONWebToken(admin);
-                response = Ok(new { token = tokenString });
+                var tokenDto = new TokenDto { Value = tokenString};
+                response = Ok(tokenDto);
             }
 
             return response;
