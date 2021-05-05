@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -17,7 +18,9 @@ namespace BakeMyWorld.ConsoleManager
         {
             httpClient.BaseAddress = new Uri("https://localhost:44378/api/");
 
-            HandleLogin();
+            var token = HandleLogin();
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             CursorVisible = false;
 
@@ -54,10 +57,11 @@ namespace BakeMyWorld.ConsoleManager
         }
 
 
-        private static void HandleLogin()
+        private static string HandleLogin()
         {
             // Declare credentials "validator"
             bool loginOk = false;
+            string token = null;
 
             // Prompt user to enter credentials until valid
             // Open "login loop"
@@ -83,11 +87,15 @@ namespace BakeMyWorld.ConsoleManager
 
 
                 // Check if input credentials match target credentials
-                loginOk = Authorize(inputUsername, inputPassword);
+                token = Authorize(inputUsername, inputPassword);
+                loginOk = token != null ? true : false;
 
             } // the end of the "login loop"
+
+            return token;
         }
-        private static bool Authorize(string inputUsername, string inputPassword)
+
+        private static string Authorize(string inputUsername, string inputPassword)
         {
             // Instantiate new Admin object based on retrieved values
             var admin = new Admin(inputUsername, inputPassword);
@@ -111,17 +119,22 @@ namespace BakeMyWorld.ConsoleManager
 
             if (response.IsSuccessStatusCode)
             {
+                var json = response.Content.ReadAsStringAsync().Result;
+                var tokenResponse = JsonConvert.DeserializeObject<Token>(json);
+                string token = tokenResponse.Value;
+                
                 WriteLine("\n  You logged in as Admin");
                 Thread.Sleep(2000);
                 Clear();
-                return true;
+                
+                return token;
             }
             else
             {
                 WriteLine("\n  Access denied");
                 Thread.Sleep(2000);
                 Clear();
-                return false;
+                return null;
             }
         }
 
