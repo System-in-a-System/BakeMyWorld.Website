@@ -98,14 +98,14 @@ namespace BakeMyWorld.ConsoleManager
         private static string Authorize(string inputUsername, string inputPassword)
         {
             // Instantiate new Admin object based on retrieved values
-            var admin = new Admin(inputUsername, inputPassword);
+            var user = new Credentials(inputUsername, inputPassword);
 
             // Set TypeNameHandling to auto
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Auto;
 
             // Serialize to JSON
-            var httpContent = JsonConvert.SerializeObject(admin, settings);
+            var httpContent = JsonConvert.SerializeObject(user, settings);
 
             // Construct a content object to send the data
             var buffer = System.Text.Encoding.UTF8.GetBytes(httpContent);
@@ -123,7 +123,7 @@ namespace BakeMyWorld.ConsoleManager
                 var tokenResponse = JsonConvert.DeserializeObject<Token>(json);
                 string token = tokenResponse.Value;
                 
-                WriteLine("\n  You logged in as Admin");
+                WriteLine("\n  You logged in");
                 Thread.Sleep(2000);
                 Clear();
                 
@@ -672,10 +672,7 @@ namespace BakeMyWorld.ConsoleManager
                     SetCursorPosition(2, 13);
                     Write("Price: ");
 
-                    SetCursorPosition(2, 15);
-                    Write("Cake Category: ");
-
-
+                    
                     // Set cursor to visible
                     CursorVisible = true;
 
@@ -698,9 +695,7 @@ namespace BakeMyWorld.ConsoleManager
                     bool priceOk = Int32.TryParse(ReadLine(), out int priceParsed);
                     int price = priceOk ? priceParsed : 0;
 
-                    SetCursorPosition(unifiedIdentation, 15);
-                    string categoryName = ReadLine();
-
+                    
 
                     // Further confirmation request
                     ConsoleKeyInfo confirmation = RequestConfirmation();
@@ -708,18 +703,8 @@ namespace BakeMyWorld.ConsoleManager
                     // Respond to confirmation choice: "Yes"
                     if (confirmation.Key == ConsoleKey.Y)
                     {
-                        var categoryId = FetchCategoryIdByCategoryName(categoryName);
-
-                        if (categoryId < 0)
-                        {
-                            WriteLine("\n  Indicated Category was not found...");
-                            Thread.Sleep(2000);
-                            Clear();
-                            break;
-                        }
-
                         // Instantiate new Cake object based on retrieved values
-                        var cake = new Cake(id, name, description, imageUrl, price, categoryId);
+                        var cake = new Cake(id, name, description, imageUrl, price);
 
                         // Set TypeNameHandling to auto
                         JsonSerializerSettings settings = new JsonSerializerSettings();
