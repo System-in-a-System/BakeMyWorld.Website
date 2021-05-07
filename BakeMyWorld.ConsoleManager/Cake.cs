@@ -13,6 +13,23 @@ namespace BakeMyWorld.ConsoleManager
 
         }
 
+        public Cake(string name, string description, Uri imageUrl, decimal price)
+        {
+            Name = name;
+            Description = description;
+            ImageUrl = imageUrl;
+            Price = price;
+        }
+
+        public Cake(int id, string name, string description, Uri imageUrl, decimal price)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            ImageUrl = imageUrl;
+            Price = price;
+        }
+
         public Cake(string name, string description, Uri imageUrl, decimal price, int categoryId)
         {
             Name = name;
