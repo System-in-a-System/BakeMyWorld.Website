@@ -1,71 +1,80 @@
 ﻿using BakeMyWorld.Website.Areas.API.Models;
+using BakeMyWorld.Website.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BakeMyWorld.Website.Areas.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private IConfiguration _config;
+        private readonly IConfiguration config;
+        private readonly UserManager<User> userManager;
 
-        public LoginController(IConfiguration config)
+        public LoginController(IConfiguration config, UserManager<User> userManager)
         {
-            _config = config;
+            this.config = config;
+            this.userManager = userManager;
         }
 
         [AllowAnonymous]
         [HttpPost]
         // POST api/login
-        public IActionResult Login(AdminDto login)
+        public IActionResult Login(CredentialsDto credentialsDto)
         {
-            IActionResult response = Unauthorized();
-            var admin = AuthenticateAdmin(login);
+            var user = userManager.FindByNameAsync(credentialsDto.Nickname).GetAwaiter().GetResult();
+            var hasAccess = user.Password == credentialsDto.Password ? true : false;
 
-            if (admin != null)
+            if (hasAccess)
             {
-                var tokenString = GenerateJSONWebToken(admin);
-                var tokenDto = new TokenDto { Value = tokenString};
-                response = Ok(tokenDto);
+                var token = GenerateJSONWebToken(user);
+                return Ok(token);
             }
 
-            return response;
+            return Unauthorized(); // 401 Unauthorized         
         }
 
-        private string GenerateJSONWebToken(AdminDto userInfo)
+        private TokenDto GenerateJSONWebToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-              _config["Jwt:Issuer"],
+            var claims = new List<Claim>();
+
+            var roles = userManager.GetRolesAsync(user).Result;
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            //claims.Add(new Claim(JwtRegisteredClaimNames.Sub, customer.UserName)),
+            //claims.Add(new Claim("address", user.Address));
+            //claims.Add(new Claim("firstName", user.FirstName));
+            //claims.Add(new Claim("lastName", user.LastName));
+            //claims.Add(new Claim("favoriteColor", "green"));
+
+            var tokenDescription = new JwtSecurityToken(config["Jwt:Issuer"],
+              config["Jwt:Issuer"],
+              claims: claims,
               null,
               expires: DateTime.Now.AddMinutes(120),
               signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenDescription);
 
-        private AdminDto AuthenticateAdmin(AdminDto login)
-        {
-            AdminDto admin = null;
-   
-            if (login.AdminName == "Admin" && login.AdminPassword == "123")
-            {
-                admin = new AdminDto { AdminName = "Admin", AdminPassword = "123" };
-            }
-            return admin;
+            var tokenDto = new TokenDto { Value = token };
+
+            return tokenDto;
         }
     }
 }
