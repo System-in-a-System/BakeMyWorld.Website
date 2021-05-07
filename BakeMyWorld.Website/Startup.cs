@@ -1,7 +1,10 @@
 using BakeMyWorld.Website.Data;
+using BakeMyWorld.Website.Data.Entities;
+using BakeMyWorld.Website.Models.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +55,10 @@ namespace BakeMyWorld.Website
 
             services.AddDbContext<BakeMyWorldContext>
               (options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<BakeMyWorldContext>();
 
             services.AddControllersWithViews();
         }
