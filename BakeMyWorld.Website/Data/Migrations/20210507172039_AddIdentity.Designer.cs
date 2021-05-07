@@ -4,14 +4,16 @@ using BakeMyWorld.Website.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BakeMyWorld.Website.Migrations
 {
     [DbContext(typeof(BakeMyWorldContext))]
-    partial class BakeMyWorldContextModelSnapshot : ModelSnapshot
+    [Migration("20210507172039_AddIdentity")]
+    partial class AddIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,15 +304,6 @@ namespace BakeMyWorld.Website.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "29b27620-2844-4ea0-9001-aa5759f926e3",
-                            ConcurrencyStamp = "b402fb88-6e7f-4229-823a-b83e81041126",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
