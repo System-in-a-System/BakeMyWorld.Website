@@ -9,12 +9,13 @@ using BakeMyWorld.Website.Data;
 using BakeMyWorld.Website.Data.Entities;
 using BakeMyWorld.Website.Areas.API.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BakeMyWorld.Website.Areas.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly BakeMyWorldContext context;
@@ -46,7 +47,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // PUT: api/Categories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, CategoryDto categoryDto)
         {
@@ -83,7 +84,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // POST: api/Categories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(CategoryDto categoryDto)
         {
@@ -100,6 +101,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // DELETE: api/Categories/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
