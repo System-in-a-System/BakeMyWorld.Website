@@ -20,7 +20,26 @@ namespace BakeMyWorld.ConsoleManager
             httpClient.BaseAddress = new Uri("https://localhost:44378/api/");
 
             var token = HandleLogin();
-            ShowWelcomeMessage(token);
+
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token);
+            var tokenS = jsonToken as JwtSecurityToken;
+
+            var nickname = tokenS.Claims.FirstOrDefault(x => x.Type == "Nickname")?.Value;
+            var email = tokenS.Claims.FirstOrDefault(x => x.Type == "Email")?.Value;
+            var isAdministrator = tokenS.Claims.Any(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && x.Value == "Administrator");
+
+
+            WriteLine($"\n\tWelcome, {nickname}, {email}");
+
+            if (isAdministrator)
+                WriteLine("\n\tYou logged in as an Administrator");
+            else
+                WriteLine("\n\tYou logged in as a User");
+
+            Thread.Sleep(5000);
+            Clear();
+
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 
@@ -42,11 +61,11 @@ namespace BakeMyWorld.ConsoleManager
                 switch (input.Key)
                 {
                     case ConsoleKey.D1:
-                        ShowCategoriesMenu();
+                        ShowCategoriesMenu(isAdministrator);
                         break;
 
                     case ConsoleKey.D2:
-                        ShowCakesMenu();
+                        ShowCakesMenu(isAdministrator);
                         break;
 
                     case ConsoleKey.D3:
@@ -132,70 +151,73 @@ namespace BakeMyWorld.ConsoleManager
                 return null;
             }
         }
-        private static void ShowWelcomeMessage(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token);
-            var tokenS = jsonToken as JwtSecurityToken;
-
-            var nickname = tokenS.Claims.FirstOrDefault(x => x.Type == "Nickname")?.Value;
-            var email = tokenS.Claims.FirstOrDefault(x => x.Type == "Email")?.Value;
-            var isAdministrator = tokenS.Claims.Any(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && x.Value == "Administrator");
 
 
-            WriteLine($"\n\tWelcome, {nickname}, {email}");
-
-            if (isAdministrator)
-                WriteLine("\n\tYou logged in as an Administrator");
-            else
-                WriteLine("\n\tYou logged in as a User");
-
-            Thread.Sleep(5000);
-            Clear();
-        }
-
-
-
-        private static void ShowCategoriesMenu()
+        private static void ShowCategoriesMenu(bool isAdministrator)
         {
             bool applicationRunning = true;
 
             do
             {
-                WriteLine(
-                     @"" +
-                     "\n\t1. Register New Category" +
-                     "\n\t2. List Cake Categories" +
-                     "\n\t3. Edit Cake Category" +
-                     "\n\t4. Delete Cake Category" +
-                     "\n\t5. Back");
-
-                ConsoleKeyInfo input = ReadKey(true);
-
-                Clear();
-
-                switch (input.Key)
+                if (isAdministrator)
                 {
-                    case ConsoleKey.D1:
-                        RegisterNewCategoryView();
-                        break;
+                    WriteLine(
+                               @"" +
+                               "\n\t1. Register New Category" +
+                               "\n\t2. List Cake Categories" +
+                               "\n\t3. Edit Cake Category" +
+                               "\n\t4. Delete Cake Category" +
+                               "\n\t5. Back");
 
-                    case ConsoleKey.D2:
-                        ListCakeCategories();
-                        EscapeToPreviousMenu();
-                        break;
+                    ConsoleKeyInfo input = ReadKey(true);
+                    Clear();
 
-                    case ConsoleKey.D3:
-                        EditCakeCategory();
-                        break;
+                    switch (input.Key)
+                    {
+                        case ConsoleKey.D1:
+                            RegisterNewCategoryView();
+                            break;
 
-                    case ConsoleKey.D4:
-                        DeleteCakeCategory();
-                        break;
+                        case ConsoleKey.D2:
+                            ListCakeCategories();
+                            EscapeToPreviousMenu();
+                            break;
 
-                    case ConsoleKey.D5:
-                        applicationRunning = false;
-                        break;
+                        case ConsoleKey.D3:
+                            EditCakeCategory();
+                            break;
+
+                        case ConsoleKey.D4:
+                            DeleteCakeCategory();
+                            break;
+
+                        case ConsoleKey.D5:
+                            applicationRunning = false;
+                            break;
+                    }
+                }
+
+                else
+                {
+                    WriteLine(
+                               @"" +
+                               "\n\t1. List Cake Categories" +
+                               "\n\t2. Back");
+
+                    ConsoleKeyInfo input = ReadKey(true);
+                    Clear();
+
+                    switch (input.Key)
+                    {
+                        case ConsoleKey.D1:
+                            ListCakeCategories();
+                            EscapeToPreviousMenu();
+                            break;
+
+                        case ConsoleKey.D2:
+                            applicationRunning = false;
+                            break;
+                    }
                 }
 
             } while (applicationRunning);
@@ -444,46 +466,71 @@ namespace BakeMyWorld.ConsoleManager
         }
 
 
-        private static void ShowCakesMenu()
+        private static void ShowCakesMenu(bool isAdministrator)
         {
             bool applicationRunning = true;
 
             do
             {
-                WriteLine(
-                     @"" +
-                     "\n\t1. Register New Cake" +
-                     "\n\t2. List Cakes" +
-                     "\n\t3. Edit Cake" +
-                     "\n\t4. Delete Cake" +
-                     "\n\t5. Back");
-
-                ConsoleKeyInfo input = ReadKey(true);
-
-                Clear();
-
-                switch (input.Key)
+                if (isAdministrator)
                 {
-                    case ConsoleKey.D1:
-                        RegisterNewCakeView();
-                        break;
+                    WriteLine(
+                              @"" +
+                              "\n\t1. Register New Cake" +
+                              "\n\t2. List Cakes" +
+                              "\n\t3. Edit Cake" +
+                              "\n\t4. Delete Cake" +
+                              "\n\t5. Back");
 
-                    case ConsoleKey.D2:
-                        ListCakes();
-                        EscapeToPreviousMenu();
-                        break;
+                    ConsoleKeyInfo input = ReadKey(true);
+                    Clear();
 
-                    case ConsoleKey.D3:
-                        EditCake();
-                        break;
+                    switch (input.Key)
+                    {
+                        case ConsoleKey.D1:
+                            RegisterNewCakeView();
+                            break;
 
-                    case ConsoleKey.D4:
-                        DeleteCake();
-                        break;
+                        case ConsoleKey.D2:
+                            ListCakes();
+                            EscapeToPreviousMenu();
+                            break;
 
-                    case ConsoleKey.D5:
-                        applicationRunning = false;
-                        break;
+                        case ConsoleKey.D3:
+                            EditCake();
+                            break;
+
+                        case ConsoleKey.D4:
+                            DeleteCake();
+                            break;
+
+                        case ConsoleKey.D5:
+                            applicationRunning = false;
+                            break;
+                    }
+                }
+
+                else
+                {
+                    WriteLine(
+                              @"" +
+                              "\n\t1. List Cakes" +
+                              "\n\t2. Back");
+
+                    ConsoleKeyInfo input = ReadKey(true);
+                    Clear();
+
+                    switch (input.Key)
+                    {
+                        case ConsoleKey.D1:
+                            ListCakes();
+                            EscapeToPreviousMenu();
+                            break;
+
+                        case ConsoleKey.D2:
+                            applicationRunning = false;
+                            break;
+                    }
                 }
 
             } while (applicationRunning);
