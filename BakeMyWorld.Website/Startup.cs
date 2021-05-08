@@ -62,7 +62,10 @@ namespace BakeMyWorld.Website
 
             services.AddControllersWithViews();
 
-            services.AddApiVersioning();
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
