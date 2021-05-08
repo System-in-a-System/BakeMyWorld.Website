@@ -15,6 +15,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
+    [ApiVersion("1")]
     [ApiController]
     public class CakesController : ControllerBase
     {

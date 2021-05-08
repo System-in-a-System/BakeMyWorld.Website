@@ -15,6 +15,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1")]
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration config;
