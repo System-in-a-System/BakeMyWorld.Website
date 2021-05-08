@@ -134,7 +134,7 @@ namespace BakeMyWorld.ConsoleManager
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             // Send post request
-            var response = httpClient.PostAsync("login", byteContent).Result;
+            var response = httpClient.PostAsync("login?api-version=1", byteContent).Result;
 
             if (response.IsSuccessStatusCode)
             {
@@ -276,7 +276,7 @@ namespace BakeMyWorld.ConsoleManager
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                     // Send post request
-                    var response = httpClient.PostAsync("categories", byteContent).Result;
+                    var response = httpClient.PostAsync("categories?api-version=1", byteContent).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -304,7 +304,7 @@ namespace BakeMyWorld.ConsoleManager
         private static void ListCakeCategories()
         {
             // HTTP GET https://localhost:44378/api/categories
-            var response = httpClient.GetAsync("categories")
+            var response = httpClient.GetAsync("categories?api-version=1")
                 .GetAwaiter()
                 .GetResult();
 
@@ -337,7 +337,7 @@ namespace BakeMyWorld.ConsoleManager
             bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
             int id = idValid ? idParsed : 0;
 
-            var responseLocalizedCategory = httpClient.GetAsync($"categories/{id.ToString()}")
+            var responseLocalizedCategory = httpClient.GetAsync($"categories/{id.ToString()}?api-version=1")
                 .GetAwaiter()
                 .GetResult();
 
@@ -406,7 +406,7 @@ namespace BakeMyWorld.ConsoleManager
                         byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                         // Send put request
-                        var response = httpClient.PutAsync($"categories/{id.ToString()}", byteContent).Result;
+                        var response = httpClient.PutAsync($"categories/{id.ToString()}?api-version=1", byteContent).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -447,7 +447,7 @@ namespace BakeMyWorld.ConsoleManager
             bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
             int id = idValid ? idParsed : 0;
 
-            var response = httpClient.DeleteAsync($"categories/{id.ToString()}")
+            var response = httpClient.DeleteAsync($"categories/{id.ToString()}?api-version=1")
                 .GetAwaiter()
                 .GetResult();
 
@@ -617,7 +617,7 @@ namespace BakeMyWorld.ConsoleManager
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                     // Send post request
-                    var response = httpClient.PostAsync("cakes", byteContent).Result;
+                    var response = httpClient.PostAsync("cakes?api-version=1", byteContent).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -645,7 +645,7 @@ namespace BakeMyWorld.ConsoleManager
         private static int FetchCategoryIdByCategoryName(string categoryName)
         {
             // HTTP GET https://localhost:44353/api/games
-            var response = httpClient.GetAsync("categories")
+            var response = httpClient.GetAsync("categories?api-version=1")
                 .GetAwaiter()
                 .GetResult();
 
@@ -670,7 +670,7 @@ namespace BakeMyWorld.ConsoleManager
         private static void ListCakes()
         {
             // HTTP GET https://localhost:44378/api/cakes
-            var response = httpClient.GetAsync("cakes")
+            var response = httpClient.GetAsync("cakes?api-version=1")
                 .GetAwaiter()
                 .GetResult();
 
@@ -703,7 +703,7 @@ namespace BakeMyWorld.ConsoleManager
             bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
             int id = idValid ? idParsed : 0;
 
-            var responseLocalizedCake = httpClient.GetAsync($"cakes/{id.ToString()}")
+            var responseLocalizedCake = httpClient.GetAsync($"cakes/{id.ToString()}?api-version=1")
                 .GetAwaiter()
                 .GetResult();
 
@@ -784,7 +784,7 @@ namespace BakeMyWorld.ConsoleManager
                         byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                         // Send put request
-                        var response = httpClient.PutAsync($"cakes/{id.ToString()}", byteContent).Result;
+                        var response = httpClient.PutAsync($"cakes/{id.ToString()}?api-version=1", byteContent).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -825,7 +825,7 @@ namespace BakeMyWorld.ConsoleManager
             bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
             int id = idValid ? idParsed : 0;
 
-            var response = httpClient.DeleteAsync($"cakes/{id.ToString()}")
+            var response = httpClient.DeleteAsync($"cakes/{id.ToString()}?api-version=1")
                 .GetAwaiter()
                 .GetResult();
 
