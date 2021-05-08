@@ -32,12 +32,16 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         public IActionResult Login(CredentialsDto credentialsDto)
         {
             var user = userManager.FindByNameAsync(credentialsDto.Nickname).GetAwaiter().GetResult();
-            var hasAccess = user.Password == credentialsDto.Password ? true : false;
 
-            if (hasAccess)
+            if (user != null)
             {
-                var token = GenerateJSONWebToken(user);
-                return Ok(token);
+                var hasAccess = user.Password == credentialsDto.Password ? true : false;
+
+                if (hasAccess)
+                {
+                    var token = GenerateJSONWebToken(user);
+                    return Ok(token);
+                }
             }
 
             return Unauthorized(); // 401 Unauthorized         
@@ -60,7 +64,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
             //claims.Add(new Claim(JwtRegisteredClaimNames.Sub, customer.UserName))
             claims.Add(new Claim("Nickname", user.Nickname));
             claims.Add(new Claim("Email", user.Email));
-            
+
 
             var tokenDescription = new JwtSecurityToken(config["Jwt:Issuer"],
               config["Jwt:Issuer"],
