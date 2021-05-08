@@ -57,11 +57,10 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            //claims.Add(new Claim(JwtRegisteredClaimNames.Sub, customer.UserName)),
-            //claims.Add(new Claim("address", user.Address));
-            //claims.Add(new Claim("firstName", user.FirstName));
-            //claims.Add(new Claim("lastName", user.LastName));
-            //claims.Add(new Claim("favoriteColor", "green"));
+            //claims.Add(new Claim(JwtRegisteredClaimNames.Sub, customer.UserName))
+            claims.Add(new Claim("Nickname", user.Nickname));
+            claims.Add(new Claim("Email", user.Email));
+            
 
             var tokenDescription = new JwtSecurityToken(config["Jwt:Issuer"],
               config["Jwt:Issuer"],
