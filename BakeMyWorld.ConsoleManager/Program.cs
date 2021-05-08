@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -19,11 +20,11 @@ namespace BakeMyWorld.ConsoleManager
             httpClient.BaseAddress = new Uri("https://localhost:44378/api/");
 
             var token = HandleLogin();
-
+            ShowWelcomeMessage(token);
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            CursorVisible = false;
 
+            CursorVisible = false;
             bool applicationRunning = true;
 
             do
@@ -94,7 +95,6 @@ namespace BakeMyWorld.ConsoleManager
 
             return token;
         }
-
         private static string Authorize(string inputUsername, string inputPassword)
         {
             // Instantiate new Admin object based on retrieved values
@@ -122,11 +122,6 @@ namespace BakeMyWorld.ConsoleManager
                 var json = response.Content.ReadAsStringAsync().Result;
                 var tokenResponse = JsonConvert.DeserializeObject<Token>(json);
                 string token = tokenResponse.Value;
-                
-                WriteLine("\n  You logged in");
-                Thread.Sleep(2000);
-                Clear();
-                
                 return token;
             }
             else
@@ -136,6 +131,27 @@ namespace BakeMyWorld.ConsoleManager
                 Clear();
                 return null;
             }
+        }
+        private static void ShowWelcomeMessage(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token);
+            var tokenS = jsonToken as JwtSecurityToken;
+
+            var nickname = tokenS.Claims.FirstOrDefault(x => x.Type == "Nickname")?.Value;
+            var email = tokenS.Claims.FirstOrDefault(x => x.Type == "Email")?.Value;
+            var isAdministrator = tokenS.Claims.Any(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && x.Value == "Administrator");
+
+
+            WriteLine($"\n\tWelcome, {nickname}, {email}");
+
+            if (isAdministrator)
+                WriteLine("\n\tYou logged in as an Administrator");
+            else
+                WriteLine("\n\tYou logged in as a User");
+
+            Thread.Sleep(5000);
+            Clear();
         }
 
 
@@ -302,11 +318,11 @@ namespace BakeMyWorld.ConsoleManager
             var responseLocalizedCategory = httpClient.GetAsync($"categories/{id.ToString()}")
                 .GetAwaiter()
                 .GetResult();
-        
+
             Clear();
 
             if (responseLocalizedCategory.IsSuccessStatusCode)
-            {    
+            {
                 var jsonString = responseLocalizedCategory.Content.ReadAsStringAsync()
                     .GetAwaiter()
                     .GetResult();
@@ -317,7 +333,7 @@ namespace BakeMyWorld.ConsoleManager
                 do
                 {
                     WriteLine(localizedCategory.ToString());
-                    
+
                     // Prompt
                     SetCursorPosition(2, 5);
                     Write("Category Name: ");
@@ -672,7 +688,7 @@ namespace BakeMyWorld.ConsoleManager
                     SetCursorPosition(2, 13);
                     Write("Price: ");
 
-                    
+
                     // Set cursor to visible
                     CursorVisible = true;
 
@@ -695,7 +711,7 @@ namespace BakeMyWorld.ConsoleManager
                     bool priceOk = Int32.TryParse(ReadLine(), out int priceParsed);
                     int price = priceOk ? priceParsed : 0;
 
-                    
+
 
                     // Further confirmation request
                     ConsoleKeyInfo confirmation = RequestConfirmation();
