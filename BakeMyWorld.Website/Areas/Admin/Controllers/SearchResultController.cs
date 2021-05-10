@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BakeMyWorld.Website.Areas.Admin.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Area("Admin")]
     public class SearchResultController : Controller
     {

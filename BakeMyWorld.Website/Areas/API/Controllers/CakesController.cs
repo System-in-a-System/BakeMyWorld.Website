@@ -27,6 +27,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // GET: api/Cakes
+        /// <summary>
+        /// Provides the List of Cakes
+        /// </summary>
+        /// <returns>Cakes</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cake>>> GetCakes()
         {
@@ -34,6 +41,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // GET: api/Cakes/5
+        /// <summary>
+        /// Provides a specific Cake based on id number
+        /// </summary>
+        /// <returns>Cake</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Cake>> GetCake(int id)
         {
@@ -48,6 +62,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // PUT: api/Cakes/5
+        /// <summary>
+        /// Updates a specific Cake based on id number
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCake(int id, CakeDto cakeDto)
@@ -90,7 +111,12 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // POST: api/Cakes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Registers new Cake
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<Cake>> PostCake(CakeDto cakeDto)
@@ -115,6 +141,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // DELETE: api/Cakes/5
+        /// <summary>
+        /// Deletes a specific Cake based on id number
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCake(int id)
@@ -136,7 +169,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
             return context.Cakes.Any(e => e.Id == id);
         }
 
-
+        [ApiExplorerSettings(IgnoreApi = true)]
         public CakeDto ToCakeDto(Cake cake)
            => new CakeDto
            {

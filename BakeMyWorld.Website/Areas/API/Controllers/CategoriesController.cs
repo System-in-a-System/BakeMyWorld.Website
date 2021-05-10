@@ -27,6 +27,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // GET: api/Categories
+        /// <summary>
+        /// Provides the List of Categories
+        /// </summary>
+        /// <returns>Categories</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
@@ -34,6 +41,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // GET: api/Categories/5
+        /// <summary>
+        /// Provides a specific Category based on id number
+        /// </summary>
+        /// <returns>Category</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
@@ -48,6 +62,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // PUT: api/Categories/5
+        /// <summary>
+        /// Updates a specific Category based on id number
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, CategoryDto categoryDto)
@@ -85,6 +106,12 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // POST: api/Categories
+        /// <summary>
+        /// Registers new Category
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(CategoryDto categoryDto)
@@ -102,6 +129,13 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         }
 
         // DELETE: api/Categories/5
+        /// <summary>
+        /// Deletes a specific Category based on id number
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)

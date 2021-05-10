@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BakeMyWorld.Website.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AdminLoginController : Controller
     {
         public IActionResult Index()

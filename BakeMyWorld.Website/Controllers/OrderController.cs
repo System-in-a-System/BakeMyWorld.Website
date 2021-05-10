@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BakeMyWorld.Website.Controllers
 {
-    
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class OrderController : Controller
     {
         private readonly BakeMyWorldContext context;

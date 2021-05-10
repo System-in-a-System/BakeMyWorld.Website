@@ -10,6 +10,7 @@ using BakeMyWorld.Website.Data.Entities;
 
 namespace BakeMyWorld.Website.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class CategoriesController : Controller
     {
         private readonly BakeMyWorldContext context;

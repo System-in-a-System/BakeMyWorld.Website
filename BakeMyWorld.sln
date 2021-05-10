@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeMyWorld.Website", "BakeMyWorld.Website\BakeMyWorld.Website.csproj", "{5CF96AE7-0A8F-4708-AC4C-C164DC87F794}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BakeMyWorld.ConsoleManager", "BakeMyWorld.ConsoleManager\BakeMyWorld.ConsoleManager.csproj", "{B85EACA0-9422-4811-AB4A-15C2D87528B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeMyWorld.ConsoleManager", "BakeMyWorld.ConsoleManager\BakeMyWorld.ConsoleManager.csproj", "{B85EACA0-9422-4811-AB4A-15C2D87528B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7F42F022-ED62-4E3C-A156-85CDE0AD7509}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

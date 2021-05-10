@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BakeMyWorld.Website.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class CartsController : Controller
     {
         private readonly BakeMyWorldContext context;

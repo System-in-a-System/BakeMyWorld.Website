@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BakeMyWorld.Website.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class SearchResultController : Controller
     {
         private readonly BakeMyWorldContext context;
@@ -16,7 +17,6 @@ namespace BakeMyWorld.Website.Controllers
         {
             this.context = context;
         }
-
 
         // GET: /search?q=cake
         [Route("/search")]

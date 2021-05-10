@@ -11,6 +11,7 @@ using BakeMyWorld.Website.Areas.Admin.Models.ViewModels;
 
 namespace BakeMyWorld.Website.Areas.Admin.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Area("Admin")]
     public class CakesController : Controller
     {

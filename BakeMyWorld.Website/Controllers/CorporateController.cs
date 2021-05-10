@@ -5,6 +5,7 @@ using BakeMyWorld.Website.Data;
 
 namespace BakeMyWorld.Website.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class CorporatesController : Controller
     {
         private readonly BakeMyWorldContext context;

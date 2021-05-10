@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BakeMyWorld.Website</name>
+    </assembly>
+    <members>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CakesController.GetCakes">
+            <summary>
+            Provides the List of Cakes
+            </summary>
+            <returns>Cakes</returns>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CakesController.GetCake(System.Int32)">
+            <summary>
+            Provides a specific Cake based on id number
+            </summary>
+            <returns>Cake</returns>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CakesController.PutCake(System.Int32,BakeMyWorld.Website.Areas.API.Models.CakeDto)">
+            <summary>
+            Updates a specific Cake based on id number
+            </summary>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CakesController.PostCake(BakeMyWorld.Website.Areas.API.Models.CakeDto)">
+            <summary>
+            Registers new Cake
+            </summary>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CakesController.DeleteCake(System.Int32)">
+            <summary>
+            Deletes a specific Cake based on id number
+            </summary>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CategoriesController.GetCategories">
+            <summary>
+            Provides the List of Categories
+            </summary>
+            <returns>Categories</returns>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CategoriesController.GetCategory(System.Int32)">
+            <summary>
+            Provides a specific Category based on id number
+            </summary>
+            <returns>Category</returns>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CategoriesController.PutCategory(System.Int32,BakeMyWorld.Website.Areas.API.Models.CategoryDto)">
+            <summary>
+            Updates a specific Category based on id number
+            </summary>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CategoriesController.PostCategory(BakeMyWorld.Website.Areas.API.Models.CategoryDto)">
+            <summary>
+            Registers new Category
+            </summary>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.CategoriesController.DeleteCategory(System.Int32)">
+            <summary>
+            Deletes a specific Category based on id number
+            </summary>
+        </member>
+        <member name="M:BakeMyWorld.Website.Areas.API.Controllers.LoginController.Login(BakeMyWorld.Website.Areas.API.Models.CredentialsDto)">
+            <summary>
+            Authenticates and authorizes a user
+            </summary>
+            <returns>Token</returns>
+        </member>
+    </members>
+</doc>

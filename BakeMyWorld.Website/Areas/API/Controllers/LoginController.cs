@@ -1,6 +1,7 @@
 ﻿using BakeMyWorld.Website.Areas.API.Models;
 using BakeMyWorld.Website.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,14 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
             this.userManager = userManager;
         }
 
+
+        /// <summary>
+        /// Authenticates and authorizes a user
+        /// </summary>
+        /// <returns>Token</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [AllowAnonymous]
         [HttpPost]
         // POST api/login
@@ -45,7 +54,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
                 }
             }
 
-            return Unauthorized(); // 401 Unauthorized         
+            return Unauthorized();         
         }
 
         private TokenDto GenerateJSONWebToken(User user)

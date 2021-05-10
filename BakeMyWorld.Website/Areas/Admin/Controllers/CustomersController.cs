@@ -10,6 +10,7 @@ using BakeMyWorld.Website.Data.Entities;
 
 namespace BakeMyWorld.Website.Areas.Admin.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Area("Admin")]
     public class CustomersController : Controller
     {
