@@ -17,7 +17,7 @@ namespace BakeMyWorld.ConsoleManager
 
         static void Main(string[] args)
         {
-            httpClient.BaseAddress = new Uri("https://localhost:44378/api/");
+            httpClient.BaseAddress = new Uri("https://localhost:5001/api/");
 
             var token = HandleLogin();
 
@@ -52,7 +52,8 @@ namespace BakeMyWorld.ConsoleManager
                      @"" +
                      "\n\t1. Cake Categories" +
                      "\n\t2. Cakes" +
-                     "\n\t3. Exit");
+                     "\n\t3. Corporates" +
+                     "\n\t4. Exit");
 
                 ConsoleKeyInfo input = ReadKey(true);
 
@@ -69,6 +70,10 @@ namespace BakeMyWorld.ConsoleManager
                         break;
 
                     case ConsoleKey.D3:
+                        ShowCorporatesMenu(isAdministrator);
+                        break;
+
+                    case ConsoleKey.D4:
                         applicationRunning = false;
                         break;
                 }
@@ -303,7 +308,7 @@ namespace BakeMyWorld.ConsoleManager
         }
         private static void ListCakeCategories()
         {
-            // HTTP GET https://localhost:44378/api/categories
+            
             var response = httpClient.GetAsync("categories?api-version=1")
                 .GetAwaiter()
                 .GetResult();
@@ -476,11 +481,12 @@ namespace BakeMyWorld.ConsoleManager
                 {
                     WriteLine(
                               @"" +
-                              "\n\t1. Register New Cake" +
-                              "\n\t2. List Cakes" +
-                              "\n\t3. Edit Cake" +
-                              "\n\t4. Delete Cake" +
-                              "\n\t5. Back");
+                              "\n\t1. Register New Cake To Category" +
+                              "\n\t2. Register New Cake To Corporate" +
+                              "\n\t3. List Cakes" +
+                              "\n\t4. Edit Cake" +
+                              "\n\t5. Delete Cake" +
+                              "\n\t6. Back");
 
                     ConsoleKeyInfo input = ReadKey(true);
                     Clear();
@@ -492,19 +498,23 @@ namespace BakeMyWorld.ConsoleManager
                             break;
 
                         case ConsoleKey.D2:
+                            RegisterNewCakeToCorporateView();
+                            break;
+
+                        case ConsoleKey.D3:
                             ListCakes();
                             EscapeToPreviousMenu();
                             break;
 
-                        case ConsoleKey.D3:
+                        case ConsoleKey.D4:
                             EditCake();
                             break;
 
-                        case ConsoleKey.D4:
+                        case ConsoleKey.D5:
                             DeleteCake();
                             break;
 
-                        case ConsoleKey.D5:
+                        case ConsoleKey.D6:
                             applicationRunning = false;
                             break;
                     }
@@ -600,7 +610,7 @@ namespace BakeMyWorld.ConsoleManager
                     }
 
                     // Instantiate new Cake object based on retrieved values
-                    var cake = new Cake(name, description, imageUrl, price, categoryId);
+                    var cake = new Cake(name, description, imageUrl, price, categoryId, categoryId);
 
                     // Set TypeNameHandling to auto
                     JsonSerializerSettings settings = new JsonSerializerSettings();
@@ -617,7 +627,7 @@ namespace BakeMyWorld.ConsoleManager
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                     // Send post request
-                    var response = httpClient.PostAsync("cakes?api-version=1", byteContent).Result;
+                    var response = httpClient.PostAsync("Cakes/PostCake?api-version=1", byteContent).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -666,6 +676,113 @@ namespace BakeMyWorld.ConsoleManager
                 }
             }
             return -1;
+        }
+        private static void RegisterNewCakeToCorporateView()
+        {
+            // Open prompt loop
+            do
+            {
+                // Prompt 
+                SetCursorPosition(2, 2);
+                Write("Name: ");
+
+                SetCursorPosition(2, 3);
+                Write("Description: ");
+
+                SetCursorPosition(2, 4);
+                Write("Image Url: ");
+
+                SetCursorPosition(2, 5);
+                Write("Price: ");
+
+                SetCursorPosition(2, 7);
+                Write("Corporate name: ");
+
+
+                // Set cursor to visible
+                CursorVisible = true;
+
+                // Set cursor position to each prompt subsequently & retrieve respecitve information
+                int unifiedIdentation = "Description: ".Length + 5;
+
+                SetCursorPosition(unifiedIdentation, 2);
+                string name = ReadLine();
+
+                SetCursorPosition(unifiedIdentation, 3);
+                string description = ReadLine();
+
+                SetCursorPosition(unifiedIdentation, 4);
+                string imageUrlString = ReadLine();
+                bool imageUrlOk = Uri.TryCreate(imageUrlString, UriKind.Absolute, out Uri imageUrlVerified)
+                                    && (imageUrlVerified.Scheme == Uri.UriSchemeHttp || imageUrlVerified.Scheme == Uri.UriSchemeHttps);
+                Uri imageUrl = imageUrlOk ? imageUrlVerified : new Uri("https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg");
+
+                SetCursorPosition(unifiedIdentation, 5);
+                bool priceOk = Int32.TryParse(ReadLine(), out int priceParsed);
+                int price = priceOk ? priceParsed : 0;
+
+                SetCursorPosition(unifiedIdentation, 7);
+                string corporateName = ReadLine();
+
+
+                // Further confirmation request
+                ConsoleKeyInfo confirmation = RequestConfirmation();
+
+                // Respond to confirmation choice: "Yes"
+                if (confirmation.Key == ConsoleKey.Y)
+                {
+                    var corporateId = FetchCorporateIdByCorporateName(corporateName);
+
+                    if (corporateId <= 0)
+                    {
+                        WriteLine("\n  Indicated Category was not found...");
+                        Thread.Sleep(2000);
+                        Clear();
+                        break;
+                    }
+
+                    // Instantiate new Cake object based on retrieved values
+                    var cake = new Cake(name, description, imageUrl, price, corporateId, corporateId);
+
+                    // Set TypeNameHandling to auto
+                    JsonSerializerSettings settings = new JsonSerializerSettings();
+                    settings.TypeNameHandling = TypeNameHandling.Auto;
+
+                    // Serialize to JSON
+                    var httpContent = JsonConvert.SerializeObject(cake, settings);
+
+                    // Construct a content object to send the data
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(httpContent);
+                    var byteContent = new ByteArrayContent(buffer);
+
+                    // Set the content type to JSON 
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    // Send post request
+                    var response = httpClient.PostAsync("Cakes/PostCakeToCorporate?api-version=1", byteContent).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        WriteLine("\n  Cake Added");
+                    }
+                    else
+                    {
+                        WriteLine("\n  Something went wrong...");
+                    }
+
+                    Thread.Sleep(2000);
+                    Clear();
+                    break;
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                    Clear();
+
+                    // Go back to prompt menu
+                }
+
+            } while (true);
         }
         private static void ListCakes()
         {
@@ -872,6 +989,346 @@ namespace BakeMyWorld.ConsoleManager
             } while (!confirmationOk);
 
             return confirmation;
+        }
+
+        //************************************************************************************//
+        private static void ShowCorporatesMenu(bool isAdministrator)
+        {
+            bool applicationRunning = true;
+
+            do
+            {
+                if (isAdministrator)
+                {
+                    WriteLine("1. Add new gift box");
+                    WriteLine("2. List gift boxes");
+                    WriteLine("3. Edit gift box");
+                    WriteLine("4. Delete gift box");
+                    WriteLine("5. Back");
+
+                    ConsoleKeyInfo input = ReadKey(true);
+
+                    Clear();
+
+                    switch (input.Key)
+                    {
+                        case ConsoleKey.D1:
+                            AddNewGiftBox();
+                            break;
+
+                        case ConsoleKey.D2:
+                            ListGiftBoxes();
+                            EscapeToPreviousMenu();
+                            break;
+
+                        case ConsoleKey.D3:
+                            EditGiftBox();
+                            break;
+
+                        case ConsoleKey.D4:
+                            DeleteGiftBox();
+                            break;
+
+                        case ConsoleKey.D5:
+
+                            applicationRunning = false;
+
+                            break;
+                    }
+                }
+                else
+                {
+                    WriteLine("1. List Corporate");
+                    WriteLine("2. Back");
+
+                    ConsoleKeyInfo input = ReadKey(true);
+                    Clear();
+
+                    switch (input.Key)
+                    {
+                        case ConsoleKey.D1:
+                            ListGiftBoxes();
+                            EscapeToPreviousMenu();
+                            break;
+
+                        case ConsoleKey.D2:
+                            applicationRunning = false;
+                            break;
+                    }
+                }
+            }
+
+            while (applicationRunning);
+
+        }
+        private static int FetchCorporateIdByCorporateName(string corporateName)
+        {
+          
+            var response = httpClient.GetAsync("corporates?api-version=1")
+                .GetAwaiter()
+                .GetResult();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = response.Content.ReadAsStringAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                var corporates = JsonConvert.DeserializeObject<IEnumerable<Corporate>>(jsonString);
+
+                foreach (var corporate in corporates)
+                {
+                    if (corporate.Name == corporateName)
+                    {
+                        return corporate.Id;
+                    }
+                }
+            }
+            return -1;
+        }
+        private static void DeleteGiftBox()
+        {
+            ListGiftBoxes();
+
+            WriteLine("_______________________________________________________________________________");
+
+            Write("\n ID: ");
+            bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
+            int id = idValid ? idParsed : 0;
+
+            var response = httpClient.DeleteAsync($"corporates/{id.ToString()}?api-version=1")
+                .GetAwaiter()
+                .GetResult();
+
+            Clear();
+            if (response.IsSuccessStatusCode)
+            {
+                WriteLine("Corporate Deleted");
+            }
+            else
+            {
+
+                WriteLine("Something went wrong...");
+            }
+
+            Thread.Sleep(2000);
+
+            Clear();
+        }
+        private static void EditGiftBox()
+        {
+            ListGiftBoxes();
+
+            WriteLine("_______________________________________________________________________________");
+           
+            Write("\n ID: ");
+            bool idValid = Int32.TryParse(ReadLine(), out int idParsed);
+            int id = idValid ? idParsed : 0;
+
+            var responseLocalizedCorporate = httpClient.GetAsync($"corporates/{id.ToString()}?api-version=1")
+                .GetAwaiter()
+                .GetResult();
+
+            Clear();
+
+            if (responseLocalizedCorporate.IsSuccessStatusCode)
+            {
+                var jsonString = responseLocalizedCorporate.Content.ReadAsStringAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                var localizedCorporate = JsonConvert.DeserializeObject<Corporate>(jsonString);
+
+                // Open prompt loop
+                do
+                {
+                    WriteLine(localizedCorporate.ToString());
+
+                    WriteLine("__________________________________________________________________________________________");
+                  
+                    WriteLine("Corporate Name: ");
+
+                    Write("Image Url: ");
+
+                    // Set cursor to visible
+                    CursorVisible = true;
+
+                    SetCursorPosition(16, 3);
+                    string name = ReadLine();
+
+                    SetCursorPosition(11, 4);
+                    string imageUrlString = ReadLine();
+                   
+                    bool imageUrlOk = Uri.TryCreate(imageUrlString, UriKind.Absolute, out Uri imageUrlVerified)
+                                        && (imageUrlVerified.Scheme == Uri.UriSchemeHttp || imageUrlVerified.Scheme == Uri.UriSchemeHttps);
+
+                    Uri imageUrl = imageUrlOk ? imageUrlVerified : new Uri("https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg");
+
+
+
+                    // Further confirmation request
+                    ConsoleKeyInfo confirmation = RequestConfirmation();
+
+                    // Respond to confirmation choice: "Yes"
+                    if (confirmation.Key == ConsoleKey.Y)
+                    {
+                        // Instantiate new Category object based on retrieved values
+                        var corporate = new Corporate(id, name, imageUrl);
+
+                        // Set TypeNameHandling to auto
+                        JsonSerializerSettings settings = new JsonSerializerSettings();
+                        settings.TypeNameHandling = TypeNameHandling.Auto;
+
+                        // Serialize to JSON
+                        var httpContent = JsonConvert.SerializeObject(corporate, settings);
+
+                        // Construct a content object to send the data
+                        var buffer = System.Text.Encoding.UTF8.GetBytes(httpContent);
+                        var byteContent = new ByteArrayContent(buffer);
+
+                        // Set the content type to JSON 
+                        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                        // Send put request
+                        var response = httpClient.PutAsync($"corporates/{id.ToString()}?api-version=1", byteContent).Result;
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            WriteLine("\n  Corporate Edited");
+                        }
+                        else
+                        {
+                            WriteLine("\n  Something went wrong ...");
+                        }
+
+                        Thread.Sleep(2000);
+                        Clear();
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                        Clear();
+
+                        // Go back to prompt menu
+                    }
+
+                } while (true);
+            }
+            else
+            {
+                WriteLine("\n  Corporate not found...");
+            }
+
+            Thread.Sleep(2000);
+            Clear();
+        }
+        private static void ListGiftBoxes()
+        {
+            // HTTP GET https://localhost:5001/api/corporates
+            var response = httpClient.GetAsync("corporates?api-version=1")
+               .GetAwaiter()
+               .GetResult();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = response.Content.ReadAsStringAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                var corporates = JsonConvert.DeserializeObject<IEnumerable<Corporate>>(jsonString);
+         
+
+                WriteLine("Id \t\t\t Name");
+                WriteLine("-------------------------------------------------------------");
+
+                foreach (var corporate in corporates)
+                {
+                    WriteLine($"{corporate.Id} \t\t\t {corporate.Name}");
+                }
+              
+            }
+            else
+            {
+                WriteLine("Something went wrong...");
+                Thread.Sleep(2000);
+                Clear();
+            }
+         
+        }
+        private static void AddNewGiftBox()
+        {
+            do
+            {
+
+                WriteLine("Corporate Name: ");
+
+
+                WriteLine("Image Url: ");
+
+
+
+                CursorVisible = true;
+
+                SetCursorPosition(16, 0);
+                string name = ReadLine();
+
+                SetCursorPosition(11, 1);
+                string imageUrlString = ReadLine();
+
+                bool imageUrlOk = Uri.TryCreate(imageUrlString, UriKind.Absolute, out Uri imageUrlVerified)
+                                    && (imageUrlVerified.Scheme == Uri.UriSchemeHttp || imageUrlVerified.Scheme == Uri.UriSchemeHttps);
+
+                Uri imageUrl = imageUrlOk ? imageUrlVerified : new Uri("https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg");
+
+
+                // Further confirmation request
+                ConsoleKeyInfo confirmation = RequestConfirmation();
+
+                if (confirmation.Key == ConsoleKey.Y)
+                {
+                    // Instantiate new Corporate object based on retrieved values
+                    var corporate = new Corporate(name, imageUrl);
+
+                    // Set TypeNameHandling to auto
+                    JsonSerializerSettings settings = new JsonSerializerSettings();
+                    settings.TypeNameHandling = TypeNameHandling.Auto;
+
+                    // Serialize to JSON
+                    var httpContent = JsonConvert.SerializeObject(corporate, settings);
+
+                    // Construct a content object to send the data
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(httpContent);
+                    var byteContent = new ByteArrayContent(buffer);
+
+                    // Set the content type to JSON 
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    // Send post request
+                    var response = httpClient.PostAsync("corporates?api-version=1", byteContent).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        WriteLine("\n  Corporate Added");
+                    }
+                    else
+                    {
+                        WriteLine("\n  Something went wrong...");
+                    }
+
+                    Thread.Sleep(2000);
+                    Clear();
+                    break;
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                    Clear();
+
+                    // Go back to prompt menu
+                }
+
+            } while (true);
         }
     }
 }

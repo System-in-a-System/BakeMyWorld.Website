@@ -30,14 +30,17 @@ namespace BakeMyWorld.ConsoleManager
             Price = price;
         }
 
-        public Cake(string name, string description, Uri imageUrl, decimal price, int categoryId)
+        public Cake(string name, string description, Uri imageUrl, decimal price, int categoryId, int corpoarteId)
         {
             Name = name;
             Description = description;
             ImageUrl = imageUrl;
             Price = price;
             CategoryId = categoryId;
+            CorporateId = corpoarteId;
         }
+
+      
 
         public Cake(int id, string name, string description, Uri imageUrl, decimal price, int categoryId)
         {
@@ -55,7 +58,7 @@ namespace BakeMyWorld.ConsoleManager
         public Uri ImageUrl { get; set; }
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
-
+        public int CorporateId { get; set; }
         public override string ToString()
         {
             return $"\n  Name: {this.Name}" +

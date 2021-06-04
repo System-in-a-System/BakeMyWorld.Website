@@ -10,7 +10,12 @@ namespace BakeMyWorld.Website.Data.Entities
 {
     public class Cake
     {
-        public Cake(string name, string description, Uri imageUrl, decimal price)
+
+        public Cake(int corporateId)
+        {
+            
+        }
+    public Cake(string name, string description, Uri imageUrl, decimal price)
         {
             Name = name;
             Description = description;
