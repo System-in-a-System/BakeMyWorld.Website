@@ -10,6 +10,8 @@ namespace BakeMyWorld.Website.Areas.API.Models
 {
     public class CakeDto
     {
+      
+
         public int Id { get; set; }
 
         [Required]
@@ -24,8 +26,13 @@ namespace BakeMyWorld.Website.Areas.API.Models
         public decimal Price { get; set; }
 
         public int CategoryId { get; set; }
-
+        public int CorporateId { get; set; }
         public ICollection<Category> Categories { get; set; }
             = new List<Category>();
+
+        public ICollection<Corporate> Corporates { get; set; }
+         = new List<Corporate>();
+
+  
     }
 }

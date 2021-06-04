@@ -17,6 +17,7 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
     [Route("api/[controller]")]
     [ApiVersion("1")]
     [ApiController]
+
     public class CakesController : ControllerBase
     {
         private readonly BakeMyWorldContext context;
@@ -119,6 +120,8 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Authorize(Roles = "Administrator")]
         [HttpPost]
+        [Route("[action]")]
+      
         public async Task<ActionResult<Cake>> PostCake(CakeDto cakeDto)
         {
             var cake = new Cake(
@@ -140,6 +143,38 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
             return CreatedAtAction("GetCake", new { id = cakedto.Id }, cakedto);
         }
 
+        // POST: api/Cakes/CakeToCorporate
+        /// <summary>
+        /// Registers new Cake to Corporate
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult<Cake>> PostCakeToCorporate(CakeDto cakeDto)
+        {
+            var cake = new Cake(
+                cakeDto.Id,
+                cakeDto.Name,
+                cakeDto.Description,
+                cakeDto.ImageUrl,
+                cakeDto.Price
+                );
+
+            var corporate = await context.Corporates.FirstOrDefaultAsync(c => c.Id == cakeDto.CorporateId);
+            var corporateId = cakeDto.CorporateId;
+            cake.Corporates.Add(corporate);
+
+            context.Cakes.Add(cake);
+
+            await context.SaveChangesAsync();
+
+            var cakedto = new Cake (corporateId);
+
+            return CreatedAtAction("GetCake", new { id = cake.Id }, cakedto);
+        }
         // DELETE: api/Cakes/5
         /// <summary>
         /// Deletes a specific Cake based on id number
@@ -172,13 +207,18 @@ namespace BakeMyWorld.Website.Areas.API.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public CakeDto ToCakeDto(Cake cake)
            => new CakeDto
+           
            {
+               
                Id = cake.Id,
                Name = cake.Name,
                Description = cake.Description,
                ImageUrl = cake.ImageUrl,
                Price = cake.Price,
                CategoryId = cake.Categories.FirstOrDefault().Id,
+            
            };
+
+     
     }
 }
